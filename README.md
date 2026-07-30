@@ -57,7 +57,7 @@ uv tool run copier copy gh:juftin/cookiecutter-python my-project
 Projects generated with Copier can receive later template releases:
 
 ```shell
-copier update
+copier update --answers-file .github/.copier-answers.yml
 ```
 
 Commit `.github/.copier-answers.yml` when creating the project; Copier uses it
