@@ -7,10 +7,10 @@
   </p>
 </div>
 
-[juftin]'s personal [cookiecutter] template for Python projects.
+[juftin]'s personal [Copier] template for Python projects.
 
 ```shell
-cookiecutter gh:juftin/cookiecutter-python
+copier copy --vcs-ref=HEAD gh:juftin/cookiecutter-python my-project
 ```
 
 ## Features
@@ -44,12 +44,12 @@ cookiecutter gh:juftin/cookiecutter-python
 
 ### Creating a project
 
-#### Cookiecutter
+#### Copier
 
 Generate a Python project:
 
 ```shell
-uv tool run cookiecutter gh:juftin/cookiecutter-python
+uv tool run copier copy --vcs-ref=HEAD gh:juftin/cookiecutter-python my-project
 ```
 
 #### Git Init
@@ -105,7 +105,7 @@ Once the server is running, you can view the documentation at
 [pre-commit]: https://github.com/pre-commit/pre-commit
 [gitmoji]: https://gitmoji.dev
 [semantic-release]: https://github.com/semantic-release/semantic-release
-[Cookiecutter]: https://github.com/cookiecutter/cookiecutter
+[Copier]: https://copier.readthedocs.io/
 [uv]: https://github.com/astral-sh/uv
 [task]: https://github.com/go-task/task
 [MkDocs]: https://github.com/mkdocs/mkdocs

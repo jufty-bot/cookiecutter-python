@@ -11,7 +11,7 @@ version = "0.10.0"
 
 [dependency-groups]
 dev = [
-  "cookiecutter~=2.4.0",
+  "copier~=9.0",
   "pytest",
   "pytest-cov"
 ]

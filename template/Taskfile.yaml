@@ -5,8 +5,8 @@ version: "3"
 env:
     UV_LOCKED: 1
 vars:
-    SOURCE_CODE: src/{{ cookiecutter.project_slug }}
-    DOCKER_REPO: {{ cookiecutter.github_username }}/{{ cookiecutter.friendly_name }}
+    SOURCE_CODE: src/{{ project_slug }}
+    DOCKER_REPO: {{ github_username }}/{{ friendly_name }}
 
 tasks:
     #######################################

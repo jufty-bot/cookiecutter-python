@@ -8,14 +8,14 @@ on:
             - published
 
 jobs:
-    {% if cookiecutter.publish_to_pypi == True -%}
+    {% if publish_to_pypi == True -%}
     pypi:
         name: pypi
         if: github.repository_owner == 'juftin'
         runs-on: ubuntu-latest
         environment:
             name: pypi
-            url: https://pypi.org/p/{{ cookiecutter.friendly_name }}
+            url: https://pypi.org/p/{{ friendly_name }}
         permissions:
             id-token: write
         steps:
@@ -28,7 +28,7 @@ jobs:
                   github-token: ${{"{{"}} secrets.GITHUB_TOKEN {{"}}"}}
             - name: pypi
               uses: pypa/gh-action-pypi-publish@release/v1{% endif %}
-{% if cookiecutter.publish_to_docker_hub == True %}
+{% if publish_to_docker_hub == True %}
     docker:
         name: docker
         if: github.repository_owner == 'juftin'

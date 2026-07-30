@@ -4,12 +4,12 @@ name: release
 
 on:
     push:
-        branches: [{{ cookiecutter.default_branch }}, next, beta, alpha, "*.x"]
+        branches: [{{ default_branch }}, next, beta, alpha, "*.x"]
 
 jobs:
     release:
         name: release
-        if: github.repository_owner == '{{ cookiecutter.github_username }}'
+        if: github.repository_owner == '{{ github_username }}'
         runs-on: ubuntu-latest
         permissions:
             contents: write

@@ -5,15 +5,15 @@ name: test
 on:
     push:
         branches:
-            - {{ cookiecutter.default_branch }}
+            - {{ default_branch }}
         paths:
-            - src/{{ cookiecutter.project_slug }}/**
+            - src/{{ project_slug }}/**
             - pyproject.toml
             - uv.lock
             - .github/workflows/tests.yaml
     pull_request:
         paths:
-            - src/{{ cookiecutter.project_slug }}/**
+            - src/{{ project_slug }}/**
             - pyproject.toml
             - uv.lock
             - .github/workflows/tests.yaml
@@ -45,7 +45,7 @@ jobs:
                   task: test
                   install: true
                   github-token: ${{"{{"}} secrets.GITHUB_TOKEN {{"}}"}}
-                  annotations-pytest: ${{"{{"}} matrix.python == '{{ cookiecutter.default_python_version }}' && true || false {{"}}"}}
-                  pytest-coverage: ${{"{{"}} matrix.python == '{{ cookiecutter.default_python_version }}' && github.event_name == 'pull_request' && true || false {{"}}"}}
+                  annotations-pytest: ${{"{{"}} matrix.python == '{{ default_python_version }}' && true || false {{"}}"}}
+                  pytest-coverage: ${{"{{"}} matrix.python == '{{ default_python_version }}' && github.event_name == 'pull_request' && true || false {{"}}"}}
               env:
                   UV_PYTHON: ${{"{{"}} matrix.python {{"}}"}}

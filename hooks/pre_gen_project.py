@@ -1,3 +1,0 @@
-"""
-Pre-Generation Python Hooks
-"""

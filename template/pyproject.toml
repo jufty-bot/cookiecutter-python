@@ -3,20 +3,20 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "{{ cookiecutter.friendly_name }}"
-version = "{{ cookiecutter.version }}"
-description = "{{ cookiecutter.project_short_description }}"
+name = "{{ friendly_name }}"
+version = "{{ version }}"
+description = "{{ project_short_description }}"
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = []
 authors = [
-  {name = "{{ cookiecutter.full_name }}", email = "{{ cookiecutter.email }}"}
+  {name = "{{ full_name }}", email = "{{ email }}"}
 ]
-{% if cookiecutter.license != 'UNLICENSED' -%}
-license = "{{ cookiecutter.license }}"
+{% if license != 'UNLICENSED' -%}
+license = "{{ license }}"
 {% endif -%}
 classifiers = [
-  "{{ cookiecutter.development_status }}",
+  "{{ development_status }}",
   "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3.9",
@@ -29,9 +29,9 @@ classifiers = [
 ]
 
 [project.urls]
-Documentation = "https://{{ cookiecutter.github_username }}.github.io/{{ cookiecutter.repo_name }}"
-Issues = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.repo_name }}/issues"
-Source = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.repo_name }}"
+Documentation = "https://{{ github_username }}.github.io/{{ repo_name }}"
+Issues = "https://github.com/{{ github_username }}/{{ repo_name }}/issues"
+Source = "https://github.com/{{ github_username }}/{{ repo_name }}"
 
 [dependency-groups]
 dev = [
@@ -56,7 +56,7 @@ docs = [
 [tool.pytest.ini_options]
 addopts = [
   "-v",
-  "--cov=src/{{ cookiecutter.project_slug }}",
+  "--cov=src/{{ project_slug }}",
   "--cov-report=term-missing",
   "--cov-report=xml:coverage.xml",
   "--junitxml=pytest.xml"
@@ -72,7 +72,7 @@ exclude_lines = [
 [tool.coverage.run]
 branch = true
 omit = [
-  "src/{{ cookiecutter.project_slug }}/__about__.py"
+  "src/{{ project_slug }}/__about__.py"
 ]
 parallel = true
 
@@ -142,7 +142,7 @@ select = [
 ban-relative-imports = "all"
 
 [tool.ruff.lint.isort]
-known-first-party = ["{{ cookiecutter.project_slug }}"]
+known-first-party = ["{{ project_slug }}"]
 
 [tool.ruff.lint.per-file-ignores]
 # Tests can use magic values, assertions, and relative imports
