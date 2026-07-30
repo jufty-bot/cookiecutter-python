@@ -10,7 +10,7 @@
 [juftin]'s personal [Copier] template for Python projects.
 
 ```shell
-copier copy --vcs-ref=HEAD gh:juftin/cookiecutter-python my-project
+copier copy gh:juftin/cookiecutter-python my-project
 ```
 
 ## Features
@@ -49,7 +49,7 @@ copier copy --vcs-ref=HEAD gh:juftin/cookiecutter-python my-project
 Generate a Python project:
 
 ```shell
-uv tool run copier copy --vcs-ref=HEAD gh:juftin/cookiecutter-python my-project
+uv tool run copier copy gh:juftin/cookiecutter-python my-project
 ```
 
 #### Git Init
