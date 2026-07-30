@@ -3,6 +3,7 @@
 site_name: cookiecutter-python
 nav:
     - index.md
+    - Migrating from Cookiecutter: migration.md
     - Contributing 🤝: contributing.md
 theme:
     favicon: https://juftin.com/favicon.ico
