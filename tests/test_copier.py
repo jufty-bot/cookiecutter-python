@@ -83,6 +83,22 @@ def test_copier_records_answers(rendered_project: Path) -> None:
     assert "project_slug: example_project" in answers
 
 
+def test_copier_defaults_project_name_to_destination_folder(tmp_path: Path) -> None:
+    """Use the destination folder name when no project name is supplied."""
+    project_root = tmp_path / "folder-named-project"
+    run_copy(
+        src_path=str(Path(__file__).parent.parent),
+        dst_path=project_root,
+        defaults=True,
+        overwrite=True,
+        quiet=True,
+        vcs_ref="HEAD",
+    )
+
+    answers = (project_root / ".github/.copier-answers.yaml").read_text()
+    assert "project_name: folder-named-project" in answers
+
+
 def test_copier_omits_disabled_optional_files(tmp_path: Path) -> None:
     """Preserve the optional-file behavior previously handled by hooks."""
     project_root = tmp_path / "minimal-project"
