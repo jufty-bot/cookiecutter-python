@@ -59,12 +59,12 @@ def test_copier_renders_expected_project(rendered_project: Path) -> None:
     generated_files = {
         path.relative_to(rendered_project)
         for path in rendered_project.rglob("*")
-        if path.is_file() and path.name != ".copier-answers.yml"
+        if path.is_file() and path.name != ".copier-answers.yaml"
     }
     expected_files = {
         path.relative_to(expected_project)
         for path in expected_project.rglob("*")
-        if path.is_file() and path.name != ".copier-answers.yml"
+        if path.is_file() and path.name != ".copier-answers.yaml"
     }
 
     assert generated_files == expected_files
@@ -76,7 +76,7 @@ def test_copier_renders_expected_project(rendered_project: Path) -> None:
 
 def test_copier_records_answers(rendered_project: Path) -> None:
     """Ensure generated projects retain the metadata required for updates."""
-    answers = (rendered_project / ".github/.copier-answers.yml").read_text()
+    answers = (rendered_project / ".github/.copier-answers.yaml").read_text()
 
     assert "_commit:" in answers
     assert "_src_path:" in answers
@@ -197,7 +197,7 @@ def test_copier_updates_using_configured_answers_file(tmp_path: Path) -> None:
 
     run_update(
         dst_path=project,
-        answers_file=".github/.copier-answers.yml",
+        answers_file=".github/.copier-answers.yaml",
         defaults=True,
         overwrite=True,
         quiet=True,

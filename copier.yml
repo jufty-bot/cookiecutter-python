@@ -1,59 +1,87 @@
 _min_copier_version: "9.0.0"
 _subdirectory: template
 _templates_suffix: ""
-_answers_file: .github/.copier-answers.yml
+_answers_file: .github/.copier-answers.yaml
 _envops:
   undefined: jinja2.StrictUndefined
 
+_message_after_copy: |
+  Your project "{{ repo_name }}" has been created.
+
+  Next steps:
+    1. cd {{ _copier_conf.dst_path }}
+    2. git init
+    3. task lock
+    4. task install
+    5. git add --all && git commit
+
+_message_after_update: |
+  Your project has been updated.
+
+  Review the changes, resolve any conflicts, and commit the update.
+
 project_name:
   type: str
+  help: Name displayed in project documentation.
   default: example-project
   validator: >-
     {% if not (project_name | regex_search('\\S')) %}Project name cannot be blank.{% endif %}
 friendly_name:
   type: str
+  help: Python distribution name used for package publishing.
   default: "{{ project_name | lower | replace(' ', '-') }}"
   validator: >-
     {% if not (friendly_name | regex_search('^[a-z0-9]+([._-][a-z0-9]+)*$')) %}Use lowercase letters and digits, separated by periods, hyphens, or underscores.{% endif %}
 repo_name:
   type: str
+  help: GitHub repository name.
   default: "{{ friendly_name | lower | replace(' ', '-') }}"
   validator: >-
     {% if not (repo_name | regex_search('^[a-z][a-z0-9-]*$')) %}Use lowercase letters, digits, and hyphens; start with a letter.{% endif %}
 project_slug:
   type: str
+  help: Python import package name.
   default: "{{ friendly_name | lower | replace(' ', '_') | replace('-', '_') }}"
   validator: >-
     {% if not (project_slug | regex_search('^[a-z_][a-z0-9_]*$')) %}Use lowercase letters, digits, and underscores; do not start with a digit.{% endif %}
 project_short_description:
   type: str
+  help: Short summary for the package metadata and documentation.
   default: Brief description of the project
 version:
   type: str
+  help: Initial package version.
   default: 0.1.0
 full_name:
   type: str
+  help: Primary project author's name.
   default: Justin Flannery
 email:
   type: str
+  help: Primary project author's email address.
   default: juftin@juftin.com
 github_username:
   type: str
+  help: GitHub user or organization that owns the repository.
   default: juftin
 default_python_version:
   type: str
+  help: Python version used by the generated CI and development tooling.
   choices: ["3.13", "3.12", "3.11", "3.10", "3.9"]
   default: "3.13"
 default_branch:
   type: str
+  help: Default Git branch for the generated repository.
   choices: [main, master]
   default: main
 license:
   type: str
+  help: License file and package metadata to generate.
   choices: [MIT, Apache-2.0, GPL-3.0, UNLICENSED]
   default: MIT
 development_status:
   type: str
+  help: PyPI development-status classifier.
   choices:
     - "Development Status :: 1 - Planning"
     - "Development Status :: 2 - Pre-Alpha"
@@ -65,16 +93,21 @@ development_status:
   default: "Development Status :: 1 - Planning"
 build_docker_image:
   type: bool
+  help: Include a Dockerfile and Docker workflow.
   default: false
 publish_to_pypi:
   type: bool
+  help: Include the PyPI publishing workflow.
   default: false
 publish_to_docker_hub:
   type: bool
+  help: Include the Docker Hub publishing workflow.
   default: false
 logo_url:
   type: str
+  help: Image URL used as the documentation logo.
   default: https://raw.githubusercontent.com/juftin/juftin/main/static/juftin.png
 favicon:
   type: str
+  help: Image URL used as the documentation favicon.
   default: https://juftin.com/favicon.ico

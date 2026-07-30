@@ -58,10 +58,10 @@ From a clean, committed Git worktree, projects generated with Copier can
 receive later template releases:
 
 ```shell
-copier update --answers-file .github/.copier-answers.yml
+copier update --answers-file .github/.copier-answers.yaml
 ```
 
-Commit `.github/.copier-answers.yml` when creating the project; Copier uses it
+Commit `.github/.copier-answers.yaml` when creating the project; Copier uses it
 to locate the template and preserve the original answers. See the
 [migration guide](docs/migration.md) for the update workflow and guidance for
 existing Cookiecutter projects.
