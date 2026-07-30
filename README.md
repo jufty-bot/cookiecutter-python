@@ -52,6 +52,19 @@ Generate a Python project:
 uv tool run copier copy gh:juftin/cookiecutter-python my-project
 ```
 
+### Updating from the template
+
+Projects generated with Copier can receive later template releases:
+
+```shell
+copier update
+```
+
+Commit `.github/.copier-answers.yml` when creating the project; Copier uses it
+to locate the template and preserve the original answers. See the
+[migration guide](docs/migration.md) for the update workflow and guidance for
+existing Cookiecutter projects.
+
 #### Git Init
 
 Change to the root directory of your new project, create a Git
