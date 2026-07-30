@@ -49,7 +49,7 @@ def test_copier_renders_expected_project(rendered_project: Path) -> None:
 
 def test_copier_records_answers(rendered_project: Path) -> None:
     """Ensure generated projects retain the metadata required for updates."""
-    answers = (rendered_project / ".copier-answers.yml").read_text()
+    answers = (rendered_project / ".github/.copier-answers.yml").read_text()
 
     assert "_commit:" in answers
     assert "_src_path:" in answers

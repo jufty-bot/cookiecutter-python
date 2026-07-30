@@ -141,4 +141,4 @@ dmypy.json
 example-project/
 !tests/example-project/
 !tests/example-project/.env
-tests/example-project/.copier-answers.yml
+tests/example-project/.github/.copier-answers.yml

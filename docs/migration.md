@@ -1,7 +1,7 @@
 # Migrating from Cookiecutter
 
 This repository switched from Cookiecutter to Copier for new projects. Copier
-records template answers and the source revision in `.copier-answers.yml`, which
+records template answers and the source revision in `.github/.copier-answers.yml`, which
 allows generated projects to receive future template updates.
 
 ## New projects
@@ -12,7 +12,8 @@ Generate new projects with Copier:
 uv tool run copier copy gh:juftin/cookiecutter-python my-project
 ```
 
-Commit the generated `.copier-answers.yml` file with the rest of the project.
+Commit the generated `.github/.copier-answers.yml` file with the rest of the
+project.
 It is required for Copier to discover the template and retain the answers used
 to create the project.
 
@@ -31,10 +32,10 @@ cannot be updated with `copier update`. Cookiecutter did not create the Copier
 metadata that identifies a template revision and records the generation
 answers.
 
-Do not create `.copier-answers.yml` manually in an existing project. Instead,
-generate a new Copier project in a temporary directory, compare it with the
-existing project, and port the changes you want to adopt. This keeps the
-project's application code and local customizations under your control.
+Do not create `.github/.copier-answers.yml` manually in an existing project.
+Instead, generate a new Copier project in a temporary directory, compare it
+with the existing project, and port the changes you want to adopt. This keeps
+the project's application code and local customizations under your control.
 
 ## Template releases
 
