@@ -1,9 +1,36 @@
-"""Verify that Copier renders the expected Python project."""
+"""Verify that Copier renders and updates the expected Python project."""
 
+import shutil
+import subprocess
 from pathlib import Path
 
 import pytest
-from copier import run_copy
+from copier import run_copy, run_update
+from jinja2 import UndefinedError
+
+
+def _git(directory: Path, *args: str) -> None:
+    """Run a Git command in a temporary repository used for Copier testing."""
+    subprocess.run(
+        ["git", *args],
+        check=True,
+        cwd=directory,
+        capture_output=True,
+        text=True,
+    )
+
+
+def _commit_all(directory: Path, message: str) -> None:
+    """Commit the current files so Copier can calculate a versioned update."""
+    _git(directory, "add", ".")
+    _git(directory, "commit", "--quiet", "-m", message)
+
+
+def _initialize_repository(directory: Path) -> None:
+    """Initialize a Git repository with deterministic identity for test commits."""
+    _git(directory, "init", "--quiet")
+    _git(directory, "config", "user.name", "Copier test")
+    _git(directory, "config", "user.email", "copier@example.invalid")
 
 
 @pytest.fixture
@@ -77,3 +104,104 @@ def test_copier_omits_disabled_optional_files(tmp_path: Path) -> None:
     assert not (project_root / "LICENSE").exists()
     assert not (project_root / ".github/workflows/docker.yaml").exists()
     assert not (project_root / ".github/workflows/publish.yaml").exists()
+
+
+@pytest.mark.parametrize(
+    ("question", "value"),
+    [
+        ("friendly_name", "Invalid Name"),
+        ("repo_name", "invalid_name"),
+        ("project_slug", "invalid-slug"),
+    ],
+)
+def test_copier_rejects_invalid_identifiers(
+    tmp_path: Path,
+    question: str,
+    value: str,
+) -> None:
+    """Reject identifiers that would create invalid package or repository paths."""
+    with pytest.raises(ValueError, match=f"Validation error for question '{question}'"):
+        run_copy(
+            src_path=str(Path(__file__).parent.parent),
+            dst_path=tmp_path / "invalid-project",
+            data={question: value},
+            defaults=True,
+            overwrite=True,
+            quiet=True,
+            vcs_ref="HEAD",
+        )
+
+
+def test_copier_fails_for_undefined_template_variables(tmp_path: Path) -> None:
+    """Fail generation when a template refers to an undefined answer."""
+    source = tmp_path / "template-source"
+    shutil.copytree(
+        Path(__file__).parent.parent,
+        source,
+        ignore=shutil.ignore_patterns(
+            ".git",
+            ".venv",
+            ".pytest_cache",
+            "__pycache__",
+            "site",
+        ),
+    )
+    readme = source / "template/README.md"
+    readme.write_text(f"{readme.read_text()}\n{{{{ undefined_template_variable }}}}\n")
+
+    with pytest.raises(UndefinedError):
+        run_copy(
+            src_path=str(source),
+            dst_path=tmp_path / "generated-project",
+            defaults=True,
+            overwrite=True,
+            quiet=True,
+        )
+
+
+def test_copier_updates_using_configured_answers_file(tmp_path: Path) -> None:
+    """Update a generated project using its answers file outside the root path."""
+    source = tmp_path / "template-source"
+    shutil.copytree(
+        Path(__file__).parent.parent,
+        source,
+        ignore=shutil.ignore_patterns(
+            ".git",
+            ".venv",
+            ".pytest_cache",
+            "__pycache__",
+            "site",
+        ),
+    )
+    _initialize_repository(source)
+    _commit_all(source, "Initial template")
+    _git(source, "tag", "v1.0.0")
+
+    project = tmp_path / "generated-project"
+    run_copy(
+        src_path=str(source),
+        dst_path=project,
+        defaults=True,
+        overwrite=True,
+        quiet=True,
+        vcs_ref="v1.0.0",
+    )
+    _initialize_repository(project)
+    _commit_all(project, "Initial project")
+
+    readme = source / "template/README.md"
+    marker = "<!-- Updated by Copier -->\n"
+    readme.write_text(f"{readme.read_text()}\n{marker}")
+    _commit_all(source, "Update template README")
+    _git(source, "tag", "v1.1.0")
+
+    run_update(
+        dst_path=project,
+        answers_file=".github/.copier-answers.yml",
+        defaults=True,
+        overwrite=True,
+        quiet=True,
+        vcs_ref="v1.1.0",
+    )
+
+    assert marker in (project / "README.md").read_text()

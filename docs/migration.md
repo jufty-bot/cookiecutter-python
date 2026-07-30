@@ -17,7 +17,8 @@ project.
 It is required for Copier to discover the template and retain the answers used
 to create the project.
 
-After the project is committed to Git, apply later template releases with:
+After the project is committed to Git, start from a clean worktree and apply
+later template releases with:
 
 ```shell
 copier update --answers-file .github/.copier-answers.yml

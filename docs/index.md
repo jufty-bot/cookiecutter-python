@@ -54,7 +54,8 @@ uv tool run copier copy gh:juftin/cookiecutter-python my-project
 
 ### Updating from the template
 
-Projects generated with Copier can receive later template releases:
+From a clean, committed Git worktree, projects generated with Copier can
+receive later template releases:
 
 ```shell
 copier update --answers-file .github/.copier-answers.yml
