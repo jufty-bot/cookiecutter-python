@@ -4,13 +4,13 @@
 
 project_name:
   type: str
-  help: Repository and package-distribution name; defaults to the destination folder name.
+  help: Project and Repository name.
   default: "{{ _folder_name }}"
   validator: >-
     {% if not (project_name | regex_search('^[a-z][a-z0-9-]*$')) %}Use lowercase letters, digits, and hyphens; start with a letter.{% endif %}
 package_name:
   type: str
-  help: Python distribution name; accepts PyPI project names and defaults to the project name.
+  help: Python package name.
   default: "{{ project_name }}"
   validator: >-
     {% if not (package_name | regex_search('^([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9._-]*[A-Za-z0-9])\\Z')) %}Use a valid PyPI project name: ASCII letters, digits, periods, underscores, and hyphens; start and end with a letter or digit.{% endif %}
@@ -20,7 +20,7 @@ project_slug:
   default: "{{ package_name | replace('-', '_') | replace('.', '_') }}"
 project_description:
   type: str
-  help: Short summary for the package metadata and documentation.
+  help: Short summary of the project.
   default: Brief description of the project
 version:
   type: str
@@ -36,21 +36,21 @@ user_email:
   default: juftin@juftin.com
 github_user:
   type: str
-  help: GitHub user or organization that owns the repository.
+  help: GitHub user / organization name
   default: juftin
 default_python_version:
   type: str
-  help: Python version used by the generated CI and development tooling.
-  choices: ["3.13", "3.12", "3.11", "3.10", "3.9"]
-  default: "3.13"
+  help: Default Python version for the project.
+  choices: ["3.14", "3.13", "3.12", "3.11", "3.10"]
+  default: "3.14"
 default_branch:
   type: str
-  help: Default Git branch for the generated repository.
+  help: Default Git branch for the repository.
   choices: [main, master]
   default: main
 license:
   type: str
-  help: License file and package metadata to generate.
+  help: Project license.
   choices: [MIT, Apache-2.0, GPL-3.0, UNLICENSED]
   default: MIT
 development_status:
@@ -67,15 +67,15 @@ development_status:
   default: "Development Status :: 1 - Planning"
 build_docker_image:
   type: bool
-  help: Include a Dockerfile and Docker workflow.
+  help: Whether to build a docker image.
   default: false
 publish_to_pypi:
   type: bool
-  help: Include the PyPI publishing workflow.
+  help: Whether to publish to PyPI.
   default: false
 publish_to_docker_hub:
   type: bool
-  help: Include the Docker Hub publishing workflow.
+  help: Whether to publish to Docker Hub.
   default: false
 logo_url:
   type: str
@@ -111,11 +111,14 @@ _message_after_copy: |
   Your project "{{ project_name }}" has been created.
 
   Next steps:
-    1. cd {{ _copier_conf.dst_path }}
-    2. git init
-    3. task lock
-    4. task install
-    5. git add --all && git commit
+
+  cd {{ _copier_conf.dst_path }}
+  git init
+  task lock
+  task install
+  git add --all
+  pre-commit run --all-files
+  git commit -m "🎉 {{ project_name }}"
 
 # Copier message after update.
 _message_after_update: |

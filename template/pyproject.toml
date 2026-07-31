@@ -7,7 +7,7 @@ name = "{{ package_name }}"
 version = "{{ version }}"
 description = "{{ project_description }}"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = []
 authors = [
   {name = "{{ user_name }}", email = "{{ user_email }}"}
@@ -19,13 +19,12 @@ classifiers = [
   "{{ development_status }}",
   "Operating System :: OS Independent",
   "Programming Language :: Python",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
-  "Programming Language :: Python :: Implementation :: CPython",
-  "Programming Language :: Python :: Implementation :: PyPy"
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: Implementation :: CPython"
 ]
 
 [project.urls]
@@ -88,7 +87,6 @@ warn_unused_ignores = true
 
 [tool.ruff]
 line-length = 88
-target-version = "py39"
 
 [tool.ruff.lint]
 ignore = [
