@@ -78,13 +78,13 @@ def test_copier_records_answers(rendered_project: Path) -> None:
     """Ensure generated projects retain the metadata required for updates."""
     answers = (rendered_project / ".github/.copier-answers.yaml").read_text()
 
-    assert "_commit:" in answers
-    assert "_src_path:" in answers
-    assert "project_name: example-project" in answers
-    assert "package_name: example-project" in answers
-    assert "user_name: Justin Flannery" in answers
-    assert "user_email: juftin@juftin.com" in answers
-    assert "github_user: juftin" in answers
+    assert '"_commit":' in answers
+    assert '"_src_path":' in answers
+    assert '"project_name": "example-project"' in answers
+    assert '"package_name": "example-project"' in answers
+    assert '"user_name": "Justin Flannery"' in answers
+    assert '"user_email": "juftin@juftin.com"' in answers
+    assert '"github_user": "juftin"' in answers
 
 
 def test_copier_defaults_project_name_to_destination_folder(tmp_path: Path) -> None:
@@ -100,8 +100,8 @@ def test_copier_defaults_project_name_to_destination_folder(tmp_path: Path) -> N
     )
 
     answers = (project_root / ".github/.copier-answers.yaml").read_text()
-    assert "project_name: folder-named-project" in answers
-    assert "package_name: folder-named-project" in answers
+    assert '"project_name": "folder-named-project"' in answers
+    assert '"package_name": "folder-named-project"' in answers
     assert (project_root / "src/folder_named_project").is_dir()
 
 
