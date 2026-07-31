@@ -1,4 +1,4 @@
-{{ project_name }}
+{{ package_name }}
 Copyright (C) {{ '%Y' | strftime }} {{ full_name }}
 
 This program is free software: you can redistribute it and/or modify

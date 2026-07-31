@@ -7,10 +7,10 @@
 <p align="center">
   <a href="https://github.com/{{ github_username }}/{{ project_name }}"><img src="https://img.shields.io/github/v/release/{{ github_username }}/{{ project_name }}?color=blue&label={{ project_name }}&logo=github" alt="GitHub"></a>
   {%- if publish_to_pypi == True %}
-  <a href="https://pypi.python.org/pypi/{{ project_name }}/"><img src="https://img.shields.io/pypi/pyversions/{{ project_name }}?label=PyPI&logo=python" alt="PyPI"></a>
+  <a href="https://pypi.python.org/pypi/{{ package_name }}/"><img src="https://img.shields.io/pypi/pyversions/{{ package_name }}?label=PyPI&logo=python" alt="PyPI"></a>
   {%- endif %}
   {%- if publish_to_docker_hub == True %}
-  <a href="https://hub.docker.com/r/{{ github_username }}/{{ project_name }}"><img src="https://img.shields.io/docker/v/{{ github_username }}/{{ project_name }}?color=blue&label=docker&logo=docker" alt="Docker Image Version"></a>
+  <a href="https://hub.docker.com/r/{{ github_username }}/{{ package_name }}"><img src="https://img.shields.io/docker/v/{{ github_username }}/{{ package_name }}?color=blue&label=docker&logo=docker" alt="Docker Image Version"></a>
   {%- endif %}
   <a href="https://github.com/{{ github_username }}/{{ project_name }}/blob/main/LICENSE"><img src="https://img.shields.io/github/license/{{ github_username }}/{{ project_name }}?color=blue&label=License" alt="GitHub License"></a>
   <a href="https://github.com/{{ github_username }}/{{ project_name }}/actions/workflows/test.yaml?query=branch%3Amain"><img src="https://github.com/{{ github_username }}/{{ project_name }}/actions/workflows/test.yaml/badge.svg?branch=main" alt="Testing Status"></a>

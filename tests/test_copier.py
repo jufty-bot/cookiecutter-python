@@ -81,6 +81,7 @@ def test_copier_records_answers(rendered_project: Path) -> None:
     assert "_commit:" in answers
     assert "_src_path:" in answers
     assert "project_name: example-project" in answers
+    assert "package_name: example-project" in answers
 
 
 def test_copier_defaults_project_name_to_destination_folder(tmp_path: Path) -> None:
@@ -97,6 +98,27 @@ def test_copier_defaults_project_name_to_destination_folder(tmp_path: Path) -> N
 
     answers = (project_root / ".github/.copier-answers.yaml").read_text()
     assert "project_name: folder-named-project" in answers
+    assert "package_name: folder-named-project" in answers
+    assert (project_root / "src/folder_named_project").is_dir()
+
+
+def test_copier_allows_custom_package_name(tmp_path: Path) -> None:
+    """Use a custom distribution name while deriving an import-safe package slug."""
+    project_root = tmp_path / "project-name"
+    run_copy(
+        src_path=str(Path(__file__).parent.parent),
+        dst_path=project_root,
+        data={"package_name": "package-name-python"},
+        defaults=True,
+        overwrite=True,
+        quiet=True,
+        vcs_ref="HEAD",
+    )
+
+    assert (project_root / "src/package_name_python").is_dir()
+    assert (
+        'name = "package-name-python"' in (project_root / "pyproject.toml").read_text()
+    )
 
 
 def test_copier_omits_disabled_optional_files(tmp_path: Path) -> None:
@@ -128,6 +150,7 @@ def test_copier_omits_disabled_optional_files(tmp_path: Path) -> None:
         ("project_name", "Invalid Name"),
         ("project_name", "invalid_name"),
         ("project_name", "1invalid"),
+        ("package_name", "invalid_name"),
     ],
 )
 def test_copier_rejects_invalid_identifiers(

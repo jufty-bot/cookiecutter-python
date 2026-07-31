@@ -4,5 +4,5 @@
 
 from importlib.metadata import version
 
-__application__ = "{{ project_name }}"
+__application__ = "{{ package_name }}"
 __version__ = version(__application__)

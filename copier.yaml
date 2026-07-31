@@ -28,8 +28,14 @@ project_name:
     {% if not (project_name | regex_search('^[a-z][a-z0-9-]*$')) %}Use lowercase letters, digits, and hyphens; start with a letter.{% endif %}
 package_name:
   type: str
+  help: Python distribution name; defaults to the project name.
+  default: "{{ project_name }}"
+  validator: >-
+    {% if not (package_name | regex_search('^[a-z][a-z0-9-]*$')) %}Use lowercase letters, digits, and hyphens; start with a letter.{% endif %}
+project_slug:
+  type: str
   when: false
-  default: "{{ project_name | replace('-', '_') }}"
+  default: "{{ package_name | replace('-', '_') }}"
 project_description:
   type: str
   help: Short summary for the package metadata and documentation.

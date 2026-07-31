@@ -7,13 +7,13 @@ on:
         branches:
             - {{ default_branch }}
         paths:
-            - src/{{ package_name }}/**
+            - src/{{ project_slug }}/**
             - pyproject.toml
             - uv.lock
             - .github/workflows/tests.yaml
     pull_request:
         paths:
-            - src/{{ package_name }}/**
+            - src/{{ project_slug }}/**
             - pyproject.toml
             - uv.lock
             - .github/workflows/tests.yaml

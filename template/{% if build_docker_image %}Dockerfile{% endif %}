@@ -19,7 +19,7 @@ RUN --mount=from=ghcr.io/astral-sh/uv,source=/uv,target=/bin/uv \
 COPY README.md /app/README.md
 COPY pyproject.toml /app/pyproject.toml
 COPY uv.lock /app/uv.lock
-COPY src/{{ package_name }} /app/src/{{ package_name }}
+COPY src/{{ project_slug }} /app/src/{{ project_slug }}
 
 # Install project
 RUN --mount=from=ghcr.io/astral-sh/uv,source=/uv,target=/bin/uv \

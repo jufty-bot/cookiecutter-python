@@ -10,7 +10,7 @@ import mkdocs_gen_files
 logger = logging.getLogger(__name__)
 
 project_dir = Path(__file__).resolve().parent.parent
-source_code = project_dir.joinpath("src/{{ package_name }}")
+source_code = project_dir.joinpath("src/{{ project_slug }}")
 
 for path in sorted(source_code.rglob("*.py")):
     module_path = path.relative_to(project_dir).with_suffix("")
