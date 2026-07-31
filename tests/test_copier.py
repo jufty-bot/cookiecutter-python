@@ -80,7 +80,7 @@ def test_copier_records_answers(rendered_project: Path) -> None:
 
     assert "_commit:" in answers
     assert "_src_path:" in answers
-    assert "project_slug: example_project" in answers
+    assert "project_name: example-project" in answers
 
 
 def test_copier_defaults_project_name_to_destination_folder(tmp_path: Path) -> None:
@@ -125,9 +125,9 @@ def test_copier_omits_disabled_optional_files(tmp_path: Path) -> None:
 @pytest.mark.parametrize(
     ("question", "value"),
     [
-        ("friendly_name", "Invalid Name"),
-        ("repo_name", "invalid_name"),
-        ("project_slug", "invalid-slug"),
+        ("project_name", "Invalid Name"),
+        ("project_name", "invalid_name"),
+        ("project_name", "1invalid"),
     ],
 )
 def test_copier_rejects_invalid_identifiers(

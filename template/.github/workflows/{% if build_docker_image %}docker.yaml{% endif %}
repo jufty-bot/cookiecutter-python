@@ -5,7 +5,7 @@ name: docker
 on:
     pull_request:
         paths:
-            - src/{{ project_slug }}/**
+            - src/{{ package_name }}/**
             - pyproject.toml
             - .github/workflows/docker.yaml
             - Dockerfile

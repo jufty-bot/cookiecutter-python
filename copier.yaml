@@ -6,7 +6,7 @@ _envops:
   undefined: jinja2.StrictUndefined
 
 _message_after_copy: |
-  Your project "{{ repo_name }}" has been created.
+  Your project "{{ project_name }}" has been created.
 
   Next steps:
     1. cd {{ _copier_conf.dst_path }}
@@ -22,29 +22,15 @@ _message_after_update: |
 
 project_name:
   type: str
-  help: Human-readable project name; defaults to the destination folder name.
+  help: Repository and package-distribution name; defaults to the destination folder name.
   default: "{{ _folder_name }}"
   validator: >-
-    {% if not (project_name | regex_search('\\S')) %}Project name cannot be blank.{% endif %}
-friendly_name:
+    {% if not (project_name | regex_search('^[a-z][a-z0-9-]*$')) %}Use lowercase letters, digits, and hyphens; start with a letter.{% endif %}
+package_name:
   type: str
-  help: Python distribution name used for package publishing.
-  default: "{{ project_name | lower | replace(' ', '-') }}"
-  validator: >-
-    {% if not (friendly_name | regex_search('^[a-z0-9]+([._-][a-z0-9]+)*$')) %}Use lowercase letters and digits, separated by periods, hyphens, or underscores.{% endif %}
-repo_name:
-  type: str
-  help: GitHub repository name.
-  default: "{{ friendly_name | lower | replace(' ', '-') }}"
-  validator: >-
-    {% if not (repo_name | regex_search('^[a-z][a-z0-9-]*$')) %}Use lowercase letters, digits, and hyphens; start with a letter.{% endif %}
-project_slug:
-  type: str
-  help: Python import package name.
-  default: "{{ friendly_name | lower | replace(' ', '_') | replace('-', '_') }}"
-  validator: >-
-    {% if not (project_slug | regex_search('^[a-z_][a-z0-9_]*$')) %}Use lowercase letters, digits, and underscores; do not start with a digit.{% endif %}
-project_short_description:
+  when: false
+  default: "{{ project_name | replace('-', '_') }}"
+project_description:
   type: str
   help: Short summary for the package metadata and documentation.
   default: Brief description of the project

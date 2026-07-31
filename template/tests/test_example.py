@@ -1,12 +1,12 @@
 """
-Example test case for {{ friendly_name }}.
+Example test case for {{ project_name }}.
 """
 
-from {{ project_slug }} import __application__
+from {{ package_name }} import __application__
 
 
 def test_example() -> None:
     """
     Just a simple test case.
     """
-    assert __application__ == "{{ friendly_name }}"
+    assert __application__ == "{{ project_name }}"
