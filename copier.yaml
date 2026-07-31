@@ -17,7 +17,9 @@ package_name:
 project_slug:
   type: str
   when: false
-  default: "{{ package_name | replace('-', '_') | replace('.', '_') }}"
+  default: >-
+    {%- set slug = package_name | replace('-', '_') | replace('.', '_') -%}
+    {{- '_' ~ slug if not slug.isidentifier() or slug in ['False', 'None', 'True', 'and', 'as', 'assert', 'async', 'await', 'break', 'class', 'continue', 'def', 'del', 'elif', 'else', 'except', 'finally', 'for', 'from', 'global', 'if', 'import', 'in', 'is', 'lambda', 'nonlocal', 'not', 'or', 'pass', 'raise', 'return', 'try', 'while', 'with', 'yield'] else slug -}}
 project_description:
   type: str
   help: Short summary of the project.

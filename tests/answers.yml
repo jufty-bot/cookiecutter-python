@@ -5,7 +5,7 @@ version: 0.1.0
 user_name: Justin Flannery
 user_email: juftin@juftin.com
 github_user: juftin
-default_python_version: "3.13"
+default_python_version: "3.14"
 default_branch: main
 license: MIT
 development_status: "Development Status :: 1 - Planning"

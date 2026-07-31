@@ -124,6 +124,37 @@ def test_copier_allows_custom_package_name(tmp_path: Path) -> None:
     )
 
 
+@pytest.mark.parametrize(
+    ("package_name", "project_slug"),
+    [
+        ("123-package", "_123_package"),
+        ("class", "_class"),
+    ],
+)
+def test_copier_derives_import_safe_package_slug(
+    tmp_path: Path,
+    package_name: str,
+    project_slug: str,
+) -> None:
+    """Preserve valid PyPI names while generating an import-safe package slug."""
+    project_root = tmp_path / "project-name"
+    run_copy(
+        src_path=str(Path(__file__).parent.parent),
+        dst_path=project_root,
+        data={"package_name": package_name},
+        defaults=True,
+        overwrite=True,
+        quiet=True,
+        vcs_ref="HEAD",
+    )
+
+    assert (project_root / f"src/{project_slug}").is_dir()
+    assert (
+        f"from {project_slug}.__about__ import"
+        in (project_root / f"src/{project_slug}/__init__.py").read_text()
+    )
+
+
 def test_copier_omits_disabled_optional_files(tmp_path: Path) -> None:
     """Preserve the optional-file behavior previously handled by hooks."""
     project_root = tmp_path / "minimal-project"

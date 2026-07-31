@@ -45,7 +45,7 @@ jobs:
                   task: test
                   install: true
                   github-token: ${{ secrets.GITHUB_TOKEN }}
-                  annotations-pytest: ${{ matrix.python == '3.13' && true || false }}
-                  pytest-coverage: ${{ matrix.python == '3.13' && github.event_name == 'pull_request' && true || false }}
+                  annotations-pytest: ${{ matrix.python == '3.14' && true || false }}
+                  pytest-coverage: ${{ matrix.python == '3.14' && github.event_name == 'pull_request' && true || false }}
               env:
                   UV_PYTHON: ${{ matrix.python }}
