@@ -10,7 +10,7 @@
 [juftin]'s personal [Copier] template for Python projects.
 
 ```shell
-copier copy gh:juftin/cookiecutter-python my-project
+uvx copier copy gh:juftin/cookiecutter-python my-project
 ```
 
 ## Features
@@ -49,7 +49,7 @@ copier copy gh:juftin/cookiecutter-python my-project
 Generate a Python project:
 
 ```shell
-uv tool run copier copy gh:juftin/cookiecutter-python my-project
+uvx copier copy gh:juftin/cookiecutter-python my-project
 ```
 
 ### Updating from the template
@@ -58,7 +58,7 @@ From a clean, committed Git worktree, projects generated with Copier can
 receive later template releases:
 
 ```shell
-copier update --answers-file .github/.copier-answers.yaml
+uvx copier update --answers-file .github/.copier-answers.yaml
 ```
 
 Commit `.github/.copier-answers.yaml` when creating the project; Copier uses it

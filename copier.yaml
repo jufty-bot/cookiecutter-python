@@ -116,8 +116,9 @@ _message_after_copy: |
   git init
   task lock
   task install
-  git add --all
+  git add .
   pre-commit run --all-files
+  git add .
   git commit -m "🎉 {{ project_name }}"
 
 # Copier message after update.
