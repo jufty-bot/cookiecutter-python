@@ -7,10 +7,10 @@
   </p>
 </div>
 
-[juftin]'s personal [cookiecutter] template for Python projects.
+[juftin]'s personal [Copier] template for Python projects.
 
 ```shell
-cookiecutter gh:juftin/cookiecutter-python
+uvx copier copy gh:juftin/cookiecutter-python my-project
 ```
 
 ## Features
@@ -44,13 +44,27 @@ cookiecutter gh:juftin/cookiecutter-python
 
 ### Creating a project
 
-#### Cookiecutter
+#### Copier
 
 Generate a Python project:
 
 ```shell
-uv tool run cookiecutter gh:juftin/cookiecutter-python
+uvx copier copy gh:juftin/cookiecutter-python my-project
 ```
+
+### Updating from the template
+
+From a clean, committed Git worktree, projects generated with Copier can
+receive later template releases:
+
+```shell
+uvx copier update --answers-file .github/.copier-answers.yaml
+```
+
+Commit `.github/.copier-answers.yaml` when creating the project; Copier uses it
+to locate the template and preserve the original answers. See the
+[migration guide](docs/migration.md) for the update workflow and guidance for
+existing Cookiecutter projects.
 
 #### Git Init
 
@@ -105,7 +119,7 @@ Once the server is running, you can view the documentation at
 [pre-commit]: https://github.com/pre-commit/pre-commit
 [gitmoji]: https://gitmoji.dev
 [semantic-release]: https://github.com/semantic-release/semantic-release
-[Cookiecutter]: https://github.com/cookiecutter/cookiecutter
+[Copier]: https://copier.readthedocs.io/
 [uv]: https://github.com/astral-sh/uv
 [task]: https://github.com/go-task/task
 [MkDocs]: https://github.com/mkdocs/mkdocs

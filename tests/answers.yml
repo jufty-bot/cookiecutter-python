@@ -1,0 +1,16 @@
+project_name: example-project
+package_name: example-project
+project_description: Brief description of the project
+version: 0.1.0
+user_name: Justin Flannery
+user_email: juftin@juftin.com
+github_user: juftin
+default_python_version: "3.14"
+default_branch: main
+license: MIT
+development_status: "Development Status :: 1 - Planning"
+build_docker_image: true
+publish_to_pypi: true
+publish_to_docker_hub: true
+logo_url: https://raw.githubusercontent.com/juftin/juftin/main/static/juftin.png
+favicon: https://juftin.com/favicon.ico

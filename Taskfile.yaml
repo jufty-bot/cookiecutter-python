@@ -22,7 +22,7 @@ tasks:
     test:
         desc: Run Tests
         cmds:
-            - uv run -- pytest tests/test_cookiecutter.py {{.CLI_ARGS}}
+            - uv run -- pytest tests/test_copier.py {{.CLI_ARGS}}
         deps:
             - task: sync
               vars:
@@ -53,7 +53,7 @@ tasks:
         desc: Regenerate the example project for testing
         cmds:
             - rm -rf tests/example-project
-            - uv run -- cookiecutter . --replay-file tests/replay.json --output-dir {{.CLI_ARGS | default "tests"}}
+            - uv run -- copier copy --vcs-ref=HEAD --defaults --data-file tests/answers.yml . {{.CLI_ARGS | default "tests/example-project"}}
     #######################################
     # INTERNAL TASKS
     #######################################

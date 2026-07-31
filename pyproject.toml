@@ -2,16 +2,15 @@
 authors = [
   {name = "Justin Flannery", email = "juftin@juftin.com"}
 ]
-description = "Brief description of the project"
 license = "MIT"
 name = "cookiecutter-python"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 version = "0.10.0"
 
 [dependency-groups]
 dev = [
-  "cookiecutter~=2.4.0",
+  "copier~=9.0",
   "pytest",
   "pytest-cov"
 ]

@@ -105,7 +105,6 @@ celerybeat.pid
 
 # Environments
 .env
-!{{cookiecutter.repo_name}}/.env
 .venv
 env/
 venv/
@@ -138,7 +137,8 @@ dmypy.json
 # IDE Files
 .idea/
 
-# Cookiecutter Examples
+# Copier Examples
 example-project/
 !tests/example-project/
 !tests/example-project/.env
+tests/example-project/.github/.copier-answers.yaml

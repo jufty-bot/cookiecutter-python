@@ -2,7 +2,7 @@
 
 exclude: |
     (?x)(
-      {{cookiecutter.repo_name}}/|
+      template/|
       tests/example-project/
     )
 
@@ -20,10 +20,11 @@ repos:
           - id: mixed-line-ending
 
     - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
-      rev: v2.11.0
+      rev: v2.16.0
       hooks:
           - id: pretty-format-toml
             args: [--autofix, --no-sort]
+            exclude: ^uv\.lock$
 
     - repo: local
       hooks:
@@ -39,6 +40,7 @@ repos:
             description: Runs Prettier Code Formatter
             entry: prettier --write --ignore-unknown
             args: ["--tab-width=4"]
+            exclude: \.github/\.copier-answers\.yaml$
             language: node
             types:
                 - text

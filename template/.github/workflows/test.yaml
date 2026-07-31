@@ -5,15 +5,15 @@ name: test
 on:
     push:
         branches:
-            - main
+            - {{ default_branch }}
         paths:
-            - src/example_project/**
+            - src/{{ project_slug }}/**
             - pyproject.toml
             - uv.lock
             - .github/workflows/tests.yaml
     pull_request:
         paths:
-            - src/example_project/**
+            - src/{{ project_slug }}/**
             - pyproject.toml
             - uv.lock
             - .github/workflows/tests.yaml
@@ -44,8 +44,8 @@ jobs:
                   setup-uv: true
                   task: test
                   install: true
-                  github-token: ${{ secrets.GITHUB_TOKEN }}
-                  annotations-pytest: ${{ matrix.python == '3.14' && true || false }}
-                  pytest-coverage: ${{ matrix.python == '3.14' && github.event_name == 'pull_request' && true || false }}
+                  github-token: ${{"{{"}} secrets.GITHUB_TOKEN {{"}}"}}
+                  annotations-pytest: ${{"{{"}} matrix.python == '{{ default_python_version }}' && true || false {{"}}"}}
+                  pytest-coverage: ${{"{{"}} matrix.python == '{{ default_python_version }}' && github.event_name == 'pull_request' && true || false {{"}}"}}
               env:
-                  UV_PYTHON: ${{ matrix.python }}
+                  UV_PYTHON: ${{"{{"}} matrix.python {{"}}"}}

@@ -1,0 +1,130 @@
+#############################
+# COPIER TEMPLATE QUESTIONS
+#############################
+
+project_name:
+  type: str
+  help: Project and Repository name.
+  default: "{{ _folder_name }}"
+  validator: >-
+    {% if not (project_name | regex_search('^[a-z][a-z0-9-]*$')) %}Use lowercase letters, digits, and hyphens; start with a letter.{% endif %}
+package_name:
+  type: str
+  help: Python package name.
+  default: "{{ project_name }}"
+  validator: >-
+    {% if not (package_name | regex_search('^([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9._-]*[A-Za-z0-9])\\Z')) %}Use a valid PyPI project name: ASCII letters, digits, periods, underscores, and hyphens; start and end with a letter or digit.{% endif %}
+project_slug:
+  type: str
+  when: false
+  default: >-
+    {%- set slug = package_name | replace('-', '_') | replace('.', '_') -%}
+    {{- '_' ~ slug if not slug.isidentifier() or slug in ['False', 'None', 'True', 'and', 'as', 'assert', 'async', 'await', 'break', 'class', 'continue', 'def', 'del', 'elif', 'else', 'except', 'finally', 'for', 'from', 'global', 'if', 'import', 'in', 'is', 'lambda', 'nonlocal', 'not', 'or', 'pass', 'raise', 'return', 'try', 'while', 'with', 'yield'] else slug -}}
+project_description:
+  type: str
+  help: Short summary of the project.
+  default: Brief description of the project
+version:
+  type: str
+  help: Initial package version.
+  default: 0.1.0
+user_name:
+  type: str
+  help: Primary project author's name.
+  default: Justin Flannery
+user_email:
+  type: str
+  help: Primary project author's email address.
+  default: juftin@juftin.com
+github_user:
+  type: str
+  help: GitHub user / organization name
+  default: juftin
+default_python_version:
+  type: str
+  help: Default Python version for the project.
+  choices: ["3.14", "3.13", "3.12", "3.11", "3.10"]
+  default: "3.14"
+default_branch:
+  type: str
+  help: Default Git branch for the repository.
+  choices: [main, master]
+  default: main
+license:
+  type: str
+  help: Project license.
+  choices: [MIT, Apache-2.0, GPL-3.0, UNLICENSED]
+  default: MIT
+development_status:
+  type: str
+  help: PyPI development-status classifier.
+  choices:
+    - "Development Status :: 1 - Planning"
+    - "Development Status :: 2 - Pre-Alpha"
+    - "Development Status :: 3 - Alpha"
+    - "Development Status :: 4 - Beta"
+    - "Development Status :: 5 - Production/Stable"
+    - "Development Status :: 6 - Mature"
+    - "Development Status :: 7 - Inactive"
+  default: "Development Status :: 1 - Planning"
+build_docker_image:
+  type: bool
+  help: Whether to build a docker image.
+  default: false
+publish_to_pypi:
+  type: bool
+  help: Whether to publish to PyPI.
+  default: false
+publish_to_docker_hub:
+  type: bool
+  help: Whether to publish to Docker Hub.
+  default: false
+logo_url:
+  type: str
+  help: Image URL used as the documentation logo.
+  default: https://raw.githubusercontent.com/juftin/juftin/main/static/juftin.png
+favicon:
+  type: str
+  help: Image URL used as the documentation favicon.
+  default: https://juftin.com/favicon.ico
+
+#############################
+# COPIER METADATA
+#############################
+
+# Minimum supported Copier version.
+_min_copier_version: "9.0.0"
+
+# Where the Copier template lives.
+_subdirectory: template
+
+# Render every template file without a suffix.
+_templates_suffix: ""
+
+# Where to write the answers file.
+_answers_file: .github/.copier-answers.yaml
+
+# Fail when a template references an undefined answer.
+_envops:
+  undefined: jinja2.StrictUndefined
+
+# Copier message after initial creation.
+_message_after_copy: |
+  Your project "{{ project_name }}" has been created.
+
+  Next steps:
+
+  cd {{ _copier_conf.dst_path }}
+  git init
+  task lock
+  task install
+  git add .
+  pre-commit run --all-files
+  git add .
+  git commit -m "🎉 {{ project_name }}"
+
+# Copier message after update.
+_message_after_update: |
+  Your project has been updated.
+
+  Review the changes, resolve any conflicts, and commit the update.

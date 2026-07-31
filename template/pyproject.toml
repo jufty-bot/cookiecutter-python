@@ -3,18 +3,20 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "example-project"
-version = "0.1.0"
-description = "Brief description of the project"
+name = "{{ package_name }}"
+version = "{{ version }}"
+description = "{{ project_description }}"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = []
 authors = [
-  {name = "Justin Flannery", email = "juftin@juftin.com"}
+  {name = "{{ user_name }}", email = "{{ user_email }}"}
 ]
-license = "MIT"
+{% if license != 'UNLICENSED' -%}
+license = "{{ license }}"
+{% endif -%}
 classifiers = [
-  "Development Status :: 1 - Planning",
+  "{{ development_status }}",
   "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3.10",
@@ -26,9 +28,9 @@ classifiers = [
 ]
 
 [project.urls]
-Documentation = "https://juftin.github.io/example-project"
-Issues = "https://github.com/juftin/example-project/issues"
-Source = "https://github.com/juftin/example-project"
+Documentation = "https://{{ github_user }}.github.io/{{ project_name }}"
+Issues = "https://github.com/{{ github_user }}/{{ project_name }}/issues"
+Source = "https://github.com/{{ github_user }}/{{ project_name }}"
 
 [dependency-groups]
 dev = [
@@ -53,7 +55,7 @@ docs = [
 [tool.pytest.ini_options]
 addopts = [
   "-v",
-  "--cov=src/example_project",
+  "--cov=src/{{ project_slug }}",
   "--cov-report=term-missing",
   "--cov-report=xml:coverage.xml",
   "--junitxml=pytest.xml"
@@ -69,7 +71,7 @@ exclude_lines = [
 [tool.coverage.run]
 branch = true
 omit = [
-  "src/example_project/__about__.py"
+  "src/{{ project_slug }}/__about__.py"
 ]
 parallel = true
 
@@ -138,7 +140,7 @@ select = [
 ban-relative-imports = "all"
 
 [tool.ruff.lint.isort]
-known-first-party = ["example_project"]
+known-first-party = ["{{ project_slug }}"]
 
 [tool.ruff.lint.per-file-ignores]
 # Tests can use magic values, assertions, and relative imports

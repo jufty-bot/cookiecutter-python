@@ -1,13 +1,13 @@
 # $schema: https://squidfunk.github.io/mkdocs-material/schema.json
 
-site_name: example-project
+site_name: {{ project_name }}
 nav:
     - Home 🏠: index.md
     - API Documentation 🤖: reference/
     - Contributing 🤝: contributing.md
 theme:
-    favicon: https://juftin.com/favicon.ico
-    logo: https://raw.githubusercontent.com/juftin/juftin/main/static/juftin.png
+    favicon: {{ favicon }}
+    logo: {{ logo_url }}
     name: material
     features:
         - navigation.tracking
@@ -27,12 +27,12 @@ theme:
           toggle:
               icon: material/weather-night
               name: Switch to light mode
-repo_url: https://github.com/juftin/example-project
-repo_name: example-project
+repo_url: https://github.com/{{ github_user }}/{{ project_name }}
+repo_name: {{ project_name }}
 edit_uri: blob/main/docs/
-site_author: juftin
+site_author: {{ github_user }}
 remote_branch: gh-pages
-copyright: Copyright © 2026 Justin Flannery
+copyright: Copyright © {{ '%Y' | strftime }} {{ user_name }}
 extra:
     generator: false
 exclude_docs: |
