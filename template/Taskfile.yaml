@@ -6,7 +6,7 @@ env:
     UV_LOCKED: 1
 vars:
     SOURCE_CODE: src/{{ project_slug }}
-    DOCKER_REPO: {{ github_username }}/{{ package_name }}
+    DOCKER_REPO: {{ github_user }}/{{ package_name }}
 
 tasks:
     #######################################

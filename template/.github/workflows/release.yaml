@@ -9,7 +9,7 @@ on:
 jobs:
     release:
         name: release
-        if: github.repository_owner == '{{ github_username }}'
+        if: github.repository_owner == '{{ github_user }}'
         runs-on: ubuntu-latest
         permissions:
             contents: write

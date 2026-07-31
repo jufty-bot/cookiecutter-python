@@ -82,6 +82,9 @@ def test_copier_records_answers(rendered_project: Path) -> None:
     assert "_src_path:" in answers
     assert "project_name: example-project" in answers
     assert "package_name: example-project" in answers
+    assert "user_name: Justin Flannery" in answers
+    assert "user_email: juftin@juftin.com" in answers
+    assert "github_user: juftin" in answers
 
 
 def test_copier_defaults_project_name_to_destination_folder(tmp_path: Path) -> None:

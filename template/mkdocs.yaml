@@ -27,12 +27,12 @@ theme:
           toggle:
               icon: material/weather-night
               name: Switch to light mode
-repo_url: https://github.com/{{ github_username }}/{{ project_name }}
+repo_url: https://github.com/{{ github_user }}/{{ project_name }}
 repo_name: {{ project_name }}
 edit_uri: blob/main/docs/
-site_author: {{ github_username }}
+site_author: {{ github_user }}
 remote_branch: gh-pages
-copyright: Copyright © {{ '%Y' | strftime }} {{ full_name }}
+copyright: Copyright © {{ '%Y' | strftime }} {{ user_name }}
 extra:
     generator: false
 exclude_docs: |

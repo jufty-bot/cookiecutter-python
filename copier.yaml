@@ -44,15 +44,15 @@ version:
   type: str
   help: Initial package version.
   default: 0.1.0
-full_name:
+user_name:
   type: str
   help: Primary project author's name.
   default: Justin Flannery
-email:
+user_email:
   type: str
   help: Primary project author's email address.
   default: juftin@juftin.com
-github_username:
+github_user:
   type: str
   help: GitHub user or organization that owns the repository.
   default: juftin
