@@ -103,12 +103,12 @@ def test_copier_defaults_project_name_to_destination_folder(tmp_path: Path) -> N
 
 
 def test_copier_allows_custom_package_name(tmp_path: Path) -> None:
-    """Use a custom distribution name while deriving an import-safe package slug."""
+    """Use a PyPI-style distribution name while deriving a package slug."""
     project_root = tmp_path / "project-name"
     run_copy(
         src_path=str(Path(__file__).parent.parent),
         dst_path=project_root,
-        data={"package_name": "package-name-python"},
+        data={"package_name": "package.name_python"},
         defaults=True,
         overwrite=True,
         quiet=True,
@@ -117,7 +117,7 @@ def test_copier_allows_custom_package_name(tmp_path: Path) -> None:
 
     assert (project_root / "src/package_name_python").is_dir()
     assert (
-        'name = "package-name-python"' in (project_root / "pyproject.toml").read_text()
+        'name = "package.name_python"' in (project_root / "pyproject.toml").read_text()
     )
 
 
@@ -150,7 +150,9 @@ def test_copier_omits_disabled_optional_files(tmp_path: Path) -> None:
         ("project_name", "Invalid Name"),
         ("project_name", "invalid_name"),
         ("project_name", "1invalid"),
-        ("package_name", "invalid_name"),
+        ("package_name", "-invalid-name"),
+        ("package_name", "invalid-name-"),
+        ("package_name", "invalid/name"),
     ],
 )
 def test_copier_rejects_invalid_identifiers(
