@@ -5,7 +5,6 @@ version: "3"
 env:
     UV_LOCKED: 1
 vars:
-    SOURCE_CODE: src/example_project
     DOCKER_REPO: juftin/example-project
 
 tasks:
@@ -44,14 +43,24 @@ tasks:
               vars:
                   UV_PYTHON: "{{.ITEM.PYTHON}}"
     #######################################
-    lint:
-        desc: Run Code Linters
+    check:format:
+        desc: Check Code Formatting
         cmds:
-            - uv run -- ruff check {{.CLI_ARGS | default .ROOT_DIR}}
             - task: fmt
               vars:
                   CLI_ARGS: --check
+    #######################################
+    check:lint:
+        desc: Run Ruff Linter
+        cmds:
+            - uv run -- ruff check {{.CLI_ARGS | default .ROOT_DIR}}
         deps: [sync]
+    #######################################
+    check:style:
+        desc: Check Code Style
+        cmds:
+            - task: check:format
+            - task: check:lint
     #######################################
     fmt:
         desc: Run Code Formatters
@@ -66,18 +75,22 @@ tasks:
             - uv run -- ruff check --fix {{.CLI_ARGS | default .ROOT_DIR}}
         deps: [sync]
     #######################################
-    check:
-        desc: Run Static Type Checkers
+    check:types:
+        desc: Run Static Type Checks
         cmds:
             - |
                 uv run -- \
                 mypy \
                   --ignore-missing-imports \
-                  {{.CLI_ARGS | default .SOURCE_CODE}}
+                  {{.CLI_ARGS | default (printf "%s/src" .ROOT_DIR)}}
         status:
             - '[$(uv tree --package mypy) != ""]'
-        requires:
-            vars: [SOURCE_CODE]
+    #######################################
+    check:
+        desc: Run All Code Checks
+        cmds:
+            - task: check:style
+            - task: check:types
     #######################################
     dist:
         desc: Build the Project Artifacts

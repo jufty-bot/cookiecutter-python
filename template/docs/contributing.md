@@ -38,10 +38,13 @@ manager) and **[task]** (task runner). Once both are installed, you can use
 | ------------------- | ------------------- | --------------------------------------- |
 | Install Project     | `task install`      | Installs project and dev dependencies   |
 | Run Tests           | `task test`         | Runs tests with `pytest`                |
-| Run Linting         | `task lint`         | Lints code with `ruff`                  |
+| Run All Checks       | `task check`        | Runs style and type checks              |
+| Check Style          | `task check:style`  | Runs formatting and linting checks      |
+| Check Formatting     | `task check:format` | Checks formatting with `ruff`           |
+| Check Linting        | `task check:lint`   | Lints code with `ruff`                  |
 | Fix Code Issues     | `task fix`          | Formats and auto-fixes code with `ruff` |
 | Run Formatting      | `task fmt`          | Formats code with `ruff`                |
-| Run Type Checking   | `task check`        | Runs static analysis with `mypy`        |
+| Check Types          | `task check:types`  | Runs static analysis with `mypy`        |
 | Build Project       | `task build`        | Builds project artifacts                |
 | Update Dependencies | `task lock`         | Regenerates project lockfile            |
 | Serve Documentation | `task docs`         | Serves docs with `mkdocs`               |
