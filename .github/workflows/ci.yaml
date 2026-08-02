@@ -1,0 +1,142 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+
+name: ci
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+
+permissions:
+    contents: read
+    id-token: write
+    pull-requests: write
+
+jobs:
+    ci:
+        name: ${{ matrix.name }}
+        runs-on: ubuntu-24.04
+        concurrency:
+            group: ${{ github.workflow }}-${{ matrix.name }}-${{ github.event.pull_request.number }}
+            cancel-in-progress: true
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - name: test
+                      task: test
+                      install: true
+                      run_on_push: true
+                      annotations_pytest: true
+                    - name: pre-commit
+                      task: install
+                      install: true
+                      pre_commit: true
+                    - name: template - build
+                      task: build
+                      template: true
+                      buildx: true
+                    - name: template - check - format
+                      task: check:format
+                      template: true
+                      install: true
+                      annotations_ruff: true
+                    - name: template - check - lint
+                      task: check:lint
+                      template: true
+                      install: true
+                      annotations_ruff: true
+                    - name: template - check - types
+                      task: check:types
+                      template: true
+                      install: true
+                      annotations_mypy: true
+                    - name: template - test - 3.10
+                      task: test
+                      template: true
+                      install: true
+                      run_on_push: true
+                      python: "3.10"
+                    - name: template - test - 3.11
+                      task: test
+                      template: true
+                      install: true
+                      run_on_push: true
+                      python: "3.11"
+                    - name: template - test - 3.12
+                      task: test
+                      template: true
+                      install: true
+                      run_on_push: true
+                      python: "3.12"
+                    - name: template - test - 3.13
+                      task: test
+                      template: true
+                      install: true
+                      run_on_push: true
+                      python: "3.13"
+                    - name: template - test - 3.14
+                      task: test
+                      template: true
+                      install: true
+                      run_on_push: true
+                      python: "3.14"
+                      annotations_pytest: true
+                      pytest_coverage: true
+                      pytest_coverage_xml: tests/example-project/coverage.xml
+                      pytest_coverage_junit: tests/example-project/pytest.xml
+                    - name: template - pre-commit
+                      task: install
+                      template: true
+                      install: true
+                      pre_commit: true
+        steps:
+            - name: lock template project
+              if: (matrix.template || false) && (github.event_name == 'pull_request' || matrix.run_on_push)
+              uses: juftin/actions/taskfile@v1
+              with:
+                  task: lock
+                  task-args: --taskfile tests/example-project/Taskfile.yaml
+                  checkout: true
+                  fetch-depth: ${{ matrix.pre_commit && '0' || '1' }}
+                  setup-uv: true
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+            - name: install template project
+              if: matrix.template && matrix.install && (github.event_name == 'pull_request' || matrix.run_on_push)
+              uses: juftin/actions/taskfile@v1
+              with:
+                  task: install
+                  task-args: --taskfile tests/example-project/Taskfile.yaml
+                  setup-task: false
+                  setup-uv: false
+            - name: ${{ matrix.name }}
+              if: github.event_name == 'pull_request' || matrix.run_on_push
+              uses: juftin/actions/taskfile@v1
+              with:
+                  task: ${{ matrix.task }}
+                  task-args: ${{ matrix.template && '--taskfile tests/example-project/Taskfile.yaml' || '' }}
+                  checkout: ${{ !matrix.template }}
+                  install: ${{ matrix.install || false }}
+                  fetch-depth: ${{ matrix.pre_commit && '0' || '1' }}
+                  setup-task: ${{ !matrix.template }}
+                  setup-uv: ${{ !matrix.template }}
+                  buildx: ${{ matrix.buildx || false }}
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  annotations-ruff: ${{ matrix.annotations_ruff || false }}
+                  annotations-mypy: ${{ matrix.annotations_mypy || false }}
+                  annotations-pytest: ${{ matrix.annotations_pytest || false }}
+                  pytest-coverage: ${{ matrix.pytest_coverage && github.event_name == 'pull_request' && !github.event.pull_request.head.repo.fork || false }}
+                  pytest-coverage-xml: ${{ matrix.pytest_coverage_xml || 'coverage.xml' }}
+                  pytest-coverage-junit: ${{ matrix.pytest_coverage_junit || 'pytest.xml' }}
+              env:
+                  UV_PYTHON: ${{ matrix.python || '' }}
+            - name: pre-commit
+              if: matrix.pre_commit && github.event_name == 'pull_request'
+              run: |
+                  uv tool run --isolated \
+                    --with pre-commit-uv \
+                    pre-commit run \
+                      --color always \
+                      --from-ref ${{ github.event.pull_request.base.sha }} \
+                      --to-ref ${{ github.event.pull_request.head.sha }}

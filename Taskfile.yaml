@@ -6,21 +6,27 @@ env:
     UV_LOCKED: 1
 
 tasks:
-    #######################################
+    ########################
+    # DEFAULT TASK
+    ########################
     default:
-        desc: Install Project, List Tasks
+        desc: List Available Tasks
         cmds:
-            - task --list-all
-        deps: [sync]
-    #######################################
+            - task --list-all --sort alphanumeric
+        silent: true
+    ########################
+    # INSTALL AND DEPENDENCIES
+    ########################
     install:
         desc: Install Project + Dev Dependencies
         cmds:
             - task: pre-commit-install
             - task: sync
-    #######################################
+    ########################
+    # TESTING
+    ########################
     test:
-        desc: Run Tests
+        desc: Run Copier Tests
         cmds:
             - uv run -- pytest tests/test_copier.py {{.CLI_ARGS}}
         deps:
@@ -30,33 +36,39 @@ tasks:
                   CLI_ARGS: --quiet
         env:
             UV_PYTHON: "{{.UV_PYTHON}}"
-    #######################################
+    ########################
+    # DOCUMENTATION AND COMMANDS
+    ########################
     docs:
-        desc: Generate Documentation
+        desc: Run Documentation Site
         cmds:
             - uv run --group docs -- mkdocs {{.CLI_ARGS | default "serve"}}
     #######################################
     run:
-        desc: Run Command within Project (requires "--")
+        desc: Run Project Command (requires "--")
         interactive: true
         cmds:
             - uv run -- {{.CLI_ARGS}}
-    #######################################
+    ########################
+    # DEPENDENCY MANAGEMENT
+    ########################
     lock:
-        desc: Regenerate the Project Lockfile
+        desc: Regenerate Project Lockfile
         cmds:
             - uv lock
         env:
             UV_LOCKED: "0"
-    #######################################
+    ########################
+    # GENERATED PROJECT FIXTURE
+    ########################
     example-project:
-        desc: Regenerate the example project for testing
+        desc: Regenerate Example Project
         cmds:
             - rm -rf tests/example-project
             - uv run -- copier copy --vcs-ref=HEAD --defaults --data-file tests/answers.yml . {{.CLI_ARGS | default "tests/example-project"}}
-    #######################################
+    ########################
     # INTERNAL TASKS
-    #######################################
+    ########################
     sync:
         desc: Install Project Dependencies
         internal: true

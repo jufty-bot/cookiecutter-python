@@ -18,7 +18,7 @@ manager) and **[task]** (task runner). Once both are installed, you can use
     sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d
     ```
 
-3. Install project dependencies and list available tasks
+3. Install the project development environment
 
     ```shell
     task install
@@ -34,18 +34,15 @@ manager) and **[task]** (task runner). Once both are installed, you can use
 
 ### Task Cheat Sheet
 
-| Command Description | Command             | Notes                                   |
-| ------------------- | ------------------- | --------------------------------------- |
-| Install Project     | `task install`      | Installs project and dev dependencies   |
-| Run Tests           | `task test`         | Runs tests with `pytest`                |
-| Run Linting         | `task lint`         | Lints code with `ruff`                  |
-| Fix Code Issues     | `task fix`          | Formats and auto-fixes code with `ruff` |
-| Run Formatting      | `task fmt`          | Formats code with `ruff`                |
-| Run Type Checking   | `task check`        | Runs static analysis with `mypy`        |
-| Build Project       | `task build`        | Builds project artifacts                |
-| Update Dependencies | `task lock`         | Regenerates project lockfile            |
-| Serve Documentation | `task docs`         | Serves docs with `mkdocs`               |
-| Run Commands        | `task run -- <cmd>` | Runs arbitrary commands                 |
+| Command Description                | Command                | Notes                                      |
+| ---------------------------------- | ---------------------- | ------------------------------------------ |
+| List Available Tasks               | `task`                 | Lists tasks in alphanumeric order          |
+| Install Project + Dev Dependencies | `task install`         | Installs dependencies and pre-commit hooks |
+| Run Copier Tests                   | `task test`            | Runs the Copier test suite                 |
+| Run Documentation Site             | `task docs`            | Runs MkDocs                                |
+| Run a Project Command              | `task run -- <cmd>`    | Runs a command in the project environment  |
+| Regenerate Project Lockfile        | `task lock`            | Regenerates `uv.lock`                      |
+| Regenerate Example Project         | `task example-project` | Replaces the checked-in generated fixture  |
 
 ### Task Explanation
 

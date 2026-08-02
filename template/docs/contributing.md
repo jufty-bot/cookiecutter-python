@@ -18,7 +18,7 @@ manager) and **[task]** (task runner). Once both are installed, you can use
     sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d
     ```
 
-3. Install project dependencies and list available tasks
+3. Install the project development environment
 
     ```shell
     task install
@@ -34,18 +34,27 @@ manager) and **[task]** (task runner). Once both are installed, you can use
 
 ### Task Cheat Sheet
 
-| Command Description | Command             | Notes                                   |
-| ------------------- | ------------------- | --------------------------------------- |
-| Install Project     | `task install`      | Installs project and dev dependencies   |
-| Run Tests           | `task test`         | Runs tests with `pytest`                |
-| Run Linting         | `task lint`         | Lints code with `ruff`                  |
-| Fix Code Issues     | `task fix`          | Formats and auto-fixes code with `ruff` |
-| Run Formatting      | `task fmt`          | Formats code with `ruff`                |
-| Run Type Checking   | `task check`        | Runs static analysis with `mypy`        |
-| Build Project       | `task build`        | Builds project artifacts                |
-| Update Dependencies | `task lock`         | Regenerates project lockfile            |
-| Serve Documentation | `task docs`         | Serves docs with `mkdocs`               |
-| Run Commands        | `task run -- <cmd>` | Runs arbitrary commands                 |
+| Command Description             | Command                     | Notes                                           |
+| ------------------------------- | --------------------------- | ----------------------------------------------- |
+| List Available Tasks            | `task`                      | Lists tasks in alphanumeric order               |
+| Install Project + Dev Dependencies | `task install`           | Installs dependencies and pre-commit hooks      |
+| Run Tests                       | `task test`                 | Runs tests with `pytest`                        |
+| Run Tests across Python Versions | `task test:matrix`         | Runs tests on Python 3.10 through 3.14          |
+| Code Quality Check - Formatting | `task check:format`         | Checks formatting with `ruff`                   |
+| Code Quality Check - Linting    | `task check:lint`           | Checks linting with `ruff`                      |
+| Code Quality Check - Formatting + Linting | `task check:style` | Runs formatting and linting checks              |
+| Code Quality Check - Type Checking | `task check:types`       | Checks types with `mypy`                        |
+| Code Quality Check - Formatting + Linting + Type Checking | `task check` | Runs all code checks          |
+| Code Quality Auto-Fix - Formatting | `task fmt`               | Formats code with `ruff`                        |
+| Code Quality Auto-Fix - Formatting + Linting | `task fix`       | Formats code and applies `ruff` fixes           |
+| Build Distribution Artifacts    | `task dist`                 | Builds Python distribution artifacts             |
+| Build Docker Image              | `task docker`               | Builds the Docker image when a Dockerfile exists |
+| Build Project Artifacts         | `task build`                | Builds distribution artifacts and Docker image   |
+| Publish Docker Image            | `task publish`              | Pushes the Docker image in CI                    |
+| Run Documentation Site          | `task docs`                 | Runs MkDocs                                      |
+| Run Project Command             | `task run -- <cmd>`         | Runs a command in the project environment        |
+| Run Docker Command              | `task docker-run -- <cmd>`  | Runs a command in the Docker image               |
+| Regenerate Project Lockfile     | `task lock`                 | Regenerates `uv.lock`                            |
 
 ### Task Explanation
 

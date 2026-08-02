@@ -40,7 +40,11 @@ repos:
             description: Runs Prettier Code Formatter
             entry: prettier --write --ignore-unknown
             args: ["--tab-width=4"]
-            exclude: \.github/\.copier-answers\.yaml$
+            exclude: |
+                (?x)(
+                  \.github/\.copier-answers\.yaml$|
+                  ^copier\.yaml$
+                )
             language: node
             types:
                 - text

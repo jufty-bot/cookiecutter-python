@@ -5,23 +5,28 @@ version: "3"
 env:
     UV_LOCKED: 1
 vars:
-    SOURCE_CODE: src/example_project
     DOCKER_REPO: juftin/example-project
 
 tasks:
-    #######################################
+    ########################
+    # DEFAULT TASK
+    ########################
     default:
-        desc: Install Project, List Tasks
+        desc: List Available Tasks
         cmds:
-            - task --list-all
-        deps: [sync]
-    #######################################
+            - task --list-all --sort alphanumeric
+        silent: true
+    ########################
+    # INSTALL AND DEPENDENCIES
+    ########################
     install:
         desc: Install Project + Dev Dependencies
         cmds:
             - task: pre-commit-install
             - task: sync
-    #######################################
+    ########################
+    # TESTING
+    ########################
     test:
         desc: Run Tests
         cmds:
@@ -35,52 +40,72 @@ tasks:
             UV_PYTHON: "{{.UV_PYTHON}}"
     #######################################
     test:matrix:
-        desc: Run Tests with different Python versions
+        desc: Run Tests across Python Versions
         cmds:
             - for:
                   matrix:
-                      PYTHON: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+                      PYTHON: ["3.10", "3.11", "3.12", "3.13", "3.14"]
               task: test
               vars:
                   UV_PYTHON: "{{.ITEM.PYTHON}}"
-    #######################################
-    lint:
-        desc: Run Code Linters
+    ########################
+    # CODE QUALITY CHECKS
+    ########################
+    check:format:
+        desc: Code Quality Check - Formatting
         cmds:
-            - uv run -- ruff check {{.CLI_ARGS | default .ROOT_DIR}}
             - task: fmt
               vars:
                   CLI_ARGS: --check
-        deps: [sync]
     #######################################
-    fmt:
-        desc: Run Code Formatters
+    check:lint:
+        desc: Code Quality Check - Linting
         cmds:
-            - uv run -- ruff format {{.CLI_ARGS | default .ROOT_DIR}}
+            - uv run -- ruff check {{.CLI_ARGS | default .ROOT_DIR}}
         deps: [sync]
     #######################################
-    fix:
-        desc: Fix Code with Linters and Formatters
+    check:style:
+        desc: Code Quality Check - Formatting + Linting
         cmds:
-            - task: fmt
-            - uv run -- ruff check --fix {{.CLI_ARGS | default .ROOT_DIR}}
-        deps: [sync]
+            - task: check:format
+            - task: check:lint
     #######################################
-    check:
-        desc: Run Static Type Checkers
+    check:types:
+        desc: Code Quality Check - Type Checking
         cmds:
             - |
                 uv run -- \
                 mypy \
                   --ignore-missing-imports \
-                  {{.CLI_ARGS | default .SOURCE_CODE}}
+                  {{.CLI_ARGS | default (printf "%s/src" .ROOT_DIR)}}
         status:
             - '[$(uv tree --package mypy) != ""]'
-        requires:
-            vars: [SOURCE_CODE]
     #######################################
+    check:
+        desc: Code Quality Check - Formatting + Linting + Type Checking
+        cmds:
+            - task: check:style
+            - task: check:types
+    ########################
+    # CODE QUALITY FIXES
+    ########################
+    fmt:
+        desc: Code Quality Auto-Fix - Formatting
+        cmds:
+            - uv run -- ruff format {{.CLI_ARGS | default .ROOT_DIR}}
+        deps: [sync]
+    #######################################
+    fix:
+        desc: Code Quality Auto-Fix - Formatting + Linting
+        cmds:
+            - task: fmt
+            - uv run -- ruff check --fix {{.CLI_ARGS | default .ROOT_DIR}}
+        deps: [sync]
+    ########################
+    # BUILD AND PUBLISH
+    ########################
     dist:
-        desc: Build the Project Artifacts
+        desc: Build Distribution Artifacts
         cmds:
             - cmd: rm -rf {{.ROOT_DIR}}/dist
             - cmd: uv build
@@ -103,13 +128,13 @@ tasks:
             - test ! -f {{.ROOT_DIR}}/{{.DOCKERFILE | default "Dockerfile"}}
     #######################################
     build:
-        desc: Build the Project Artifacts
+        desc: Build Project Artifacts
         cmds:
             - task: dist
             - task: docker
     #######################################
     publish:
-        desc: Publish the Project Artifacts
+        desc: Publish Docker Image
         cmds:
             - task: docker
               vars:
@@ -118,20 +143,22 @@ tasks:
             vars: [CI, RELEASE_VERSION]
         status:
             - test ! -f {{.ROOT_DIR}}/{{.DOCKERFILE | default "Dockerfile"}}
-    #######################################
+    ########################
+    # DOCUMENTATION AND COMMANDS
+    ########################
     docs:
-        desc: Generate Documentation
+        desc: Run Documentation Site
         cmds:
             - uv run --group docs -- mkdocs {{.CLI_ARGS | default "serve"}}
     #######################################
     run:
-        desc: Run Command within Project (requires "--")
+        desc: Run Project Command (requires "--")
         interactive: true
         cmds:
             - uv run -- {{.CLI_ARGS}}
     #######################################
     docker-run:
-        desc: Run Command within Docker Container (supports "--" for command)
+        desc: Run Docker Command (requires "--")
         interactive: true
         cmds:
             - |
@@ -147,16 +174,18 @@ tasks:
             - test ! -f {{.ROOT_DIR}}/{{.DOCKERFILE | default "Dockerfile"}}
         requires:
             vars: [DOCKER_REPO]
-    #######################################
+    ########################
+    # DEPENDENCY MANAGEMENT
+    ########################
     lock:
-        desc: Regenerate the Project Lockfile
+        desc: Regenerate Project Lockfile
         cmds:
             - uv lock
         env:
             UV_LOCKED: "0"
-    #######################################
+    ########################
     # INTERNAL TASKS
-    #######################################
+    ########################
     sync:
         desc: Install Project Dependencies
         internal: true
