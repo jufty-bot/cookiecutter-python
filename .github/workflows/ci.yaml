@@ -30,6 +30,7 @@ jobs:
                       annotations_pytest: true
                     - name: pre-commit
                       task: install
+                      install: true
                       pre_commit: true
                     - name: template - build
                       task: build
@@ -86,6 +87,14 @@ jobs:
                   fetch-depth: ${{ matrix.pre_commit && '0' || '1' }}
                   setup-uv: true
                   github-token: ${{ secrets.GITHUB_TOKEN }}
+            - name: install template project
+              if: matrix.template && matrix.task != 'build'
+              uses: juftin/actions/taskfile@v1
+              with:
+                  task: install
+                  task-args: --taskfile tests/example-project/Taskfile.yaml
+                  setup-task: false
+                  setup-uv: false
             - name: ${{ matrix.name }}
               uses: juftin/actions/taskfile@v1
               with:

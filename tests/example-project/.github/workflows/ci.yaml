@@ -58,7 +58,7 @@ jobs:
               with:
                   task: ${{ matrix.task }}
                   checkout: true
-                  install: ${{ matrix.name != 'build' && matrix.name != 'pre-commit' }}
+                  install: ${{ matrix.name != 'build' }}
                   fetch-depth: ${{ matrix.name == 'pre-commit' && '0' || '1' }}
                   setup-uv: true
                   buildx: ${{ matrix.name == 'build' }}

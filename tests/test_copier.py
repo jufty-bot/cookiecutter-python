@@ -280,3 +280,70 @@ def test_copier_updates_using_configured_answers_file(tmp_path: Path) -> None:
     )
 
     assert marker in (project / "README.md").read_text()
+
+
+def test_copier_removes_consolidated_ci_workflows(tmp_path: Path) -> None:
+    """Delete replaced CI workflows, including downstream customizations."""
+    template_root = Path(__file__).parent.parent
+    source = tmp_path / "template-source"
+    shutil.copytree(
+        template_root,
+        source,
+        ignore=shutil.ignore_patterns(
+            ".git",
+            ".venv",
+            ".pytest_cache",
+            "__pycache__",
+            "site",
+        ),
+    )
+    workflow_dir = source / "template/.github/workflows"
+    (workflow_dir / "ci.yaml").unlink()
+    legacy_workflows = {
+        "test.yaml": "test.yaml",
+        "lint.yaml": "lint.yaml",
+        "docker.yaml": "{% if build_docker_image %}docker.yaml{% endif %}",
+    }
+    for template_path in legacy_workflows.values():
+        (workflow_dir / template_path).write_text("name: legacy\n")
+
+    _initialize_repository(source)
+    _commit_all(source, "Initial template")
+    _git(source, "tag", "v1.0.0")
+
+    project = tmp_path / "generated-project"
+    run_copy(
+        src_path=str(source),
+        dst_path=project,
+        data={"build_docker_image": True},
+        defaults=True,
+        overwrite=True,
+        quiet=True,
+        vcs_ref="v1.0.0",
+    )
+    _initialize_repository(project)
+    for filename in legacy_workflows:
+        workflow = project / ".github/workflows" / filename
+        workflow.write_text(f"{workflow.read_text()}# Downstream customization\n")
+    _commit_all(project, "Initial project")
+
+    (workflow_dir / "ci.yaml").write_text(
+        (template_root / "template/.github/workflows/ci.yaml").read_text()
+    )
+    for template_path in legacy_workflows.values():
+        (workflow_dir / template_path).unlink()
+    _commit_all(source, "Consolidate CI workflows")
+    _git(source, "tag", "v1.1.0")
+
+    run_update(
+        dst_path=project,
+        answers_file=".github/.copier-answers.yaml",
+        defaults=True,
+        overwrite=True,
+        quiet=True,
+        vcs_ref="v1.1.0",
+    )
+
+    assert (project / ".github/workflows/ci.yaml").is_file()
+    for filename in legacy_workflows:
+        assert not (project / ".github/workflows" / filename).exists()
