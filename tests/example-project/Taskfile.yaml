@@ -16,7 +16,7 @@ tasks:
         deps: [sync]
     #######################################
     install:
-        desc: Install Project + Dev Dependencies
+        desc: Install Project Dev Environment
         cmds:
             - task: pre-commit-install
             - task: sync
@@ -34,7 +34,7 @@ tasks:
             UV_PYTHON: "{{.UV_PYTHON}}"
     #######################################
     test:matrix:
-        desc: Run Tests with different Python versions
+        desc: Run Tests across Python Versions
         cmds:
             - for:
                   matrix:
@@ -116,7 +116,7 @@ tasks:
             - test ! -f {{.ROOT_DIR}}/{{.DOCKERFILE | default "Dockerfile"}}
     #######################################
     build:
-        desc: Build the Project Artifacts
+        desc: Build Project Artifacts
         cmds:
             - task: dist
             - task: docker
