@@ -69,7 +69,7 @@ tasks:
         deps: [sync]
     #######################################
     fix:
-        desc: Fix Code with Linters and Formatters
+        desc: Auto-fix Code Formatting and Style
         cmds:
             - task: fmt
             - uv run -- ruff check --fix {{.CLI_ARGS | default .ROOT_DIR}}
@@ -87,7 +87,7 @@ tasks:
             - '[$(uv tree --package mypy) != ""]'
     #######################################
     check:
-        desc: Run All Code Checks
+        desc: Check Code Formatting, Linting, and Type Checking
         cmds:
             - task: check:style
             - task: check:types
