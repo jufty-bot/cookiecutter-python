@@ -2,6 +2,7 @@
 
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -335,13 +336,20 @@ def test_copier_removes_consolidated_ci_workflows(tmp_path: Path) -> None:
     _commit_all(source, "Consolidate CI workflows")
     _git(source, "tag", "v1.1.0")
 
-    run_update(
-        dst_path=project,
-        answers_file=".github/.copier-answers.yaml",
-        defaults=True,
-        overwrite=True,
-        quiet=True,
-        vcs_ref="v1.1.0",
+    subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "copier",
+            "update",
+            "--defaults",
+            "--answers-file",
+            ".github/.copier-answers.yaml",
+            str(project),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
     )
 
     assert (project / ".github/workflows/ci.yaml").is_file()
