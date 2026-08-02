@@ -34,21 +34,26 @@ manager) and **[task]** (task runner). Once both are installed, you can use
 
 ### Task Cheat Sheet
 
-| Command Description | Command             | Notes                                   |
-| ------------------- | ------------------- | --------------------------------------- |
-| Install Project     | `task install`      | Installs project and dev dependencies   |
-| Run Tests           | `task test`         | Runs tests with `pytest`                |
-| Run All Checks       | `task check`        | Runs style and type checks              |
-| Check Style          | `task check:style`  | Runs formatting and linting checks      |
-| Check Formatting     | `task check:format` | Checks formatting with `ruff`           |
-| Check Linting        | `task check:lint`   | Lints code with `ruff`                  |
-| Fix Code Issues     | `task fix`          | Formats and auto-fixes code with `ruff` |
-| Run Formatting      | `task fmt`          | Formats code with `ruff`                |
-| Check Types          | `task check:types`  | Runs static analysis with `mypy`        |
-| Build Project       | `task build`        | Builds project artifacts                |
-| Update Dependencies | `task lock`         | Regenerates project lockfile            |
-| Serve Documentation | `task docs`         | Serves docs with `mkdocs`               |
-| Run Commands        | `task run -- <cmd>` | Runs arbitrary commands                 |
+| Command Description             | Command                     | Notes                                           |
+| ------------------------------- | --------------------------- | ----------------------------------------------- |
+| Install Project Dev Environment | `task install`              | Installs dependencies and pre-commit hooks      |
+| Run Tests                       | `task test`                 | Runs tests with `pytest`                        |
+| Run Tests across Python Versions | `task test:matrix`         | Runs tests on Python 3.10 through 3.14          |
+| Check Code Formatting           | `task check:format`         | Checks formatting with `ruff`                   |
+| Check Code Linting              | `task check:lint`           | Checks linting with `ruff`                      |
+| Check Code Formatting and Linting | `task check:style`        | Runs formatting and linting checks              |
+| Check Type Annotations          | `task check:types`          | Checks types with `mypy`                        |
+| Check Code Formatting, Linting, and Type Checking | `task check` | Runs all code checks                    |
+| Format Code                     | `task fmt`                  | Formats code with `ruff`                        |
+| Auto-fix Code Formatting and Style | `task fix`               | Formats code and applies `ruff` fixes           |
+| Build Distribution Artifacts    | `task dist`                 | Builds Python distribution artifacts             |
+| Build Docker Image              | `task docker`               | Builds the Docker image when a Dockerfile exists |
+| Build Project Artifacts         | `task build`                | Builds distribution artifacts and Docker image   |
+| Publish Docker Image            | `task publish`              | Pushes the Docker image in CI                    |
+| Run Documentation Site          | `task docs`                 | Runs MkDocs                                      |
+| Run a Project Command           | `task run -- <cmd>`         | Runs a command in the project environment        |
+| Run a Docker Command            | `task docker-run -- <cmd>`  | Runs a command in the Docker image               |
+| Update Dependency Lockfile      | `task lock`                 | Regenerates `uv.lock`                            |
 
 ### Task Explanation
 
