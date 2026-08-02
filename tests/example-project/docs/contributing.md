@@ -18,7 +18,7 @@ manager) and **[task]** (task runner). Once both are installed, you can use
     sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d
     ```
 
-3. Install project dependencies and list available tasks
+3. Install the project development environment
 
     ```shell
     task install
@@ -36,6 +36,7 @@ manager) and **[task]** (task runner). Once both are installed, you can use
 
 | Command Description             | Command                     | Notes                                           |
 | ------------------------------- | --------------------------- | ----------------------------------------------- |
+| List Available Tasks            | `task`                      | Syncs dependencies before listing tasks         |
 | Install Project Dev Environment | `task install`              | Installs dependencies and pre-commit hooks      |
 | Run Tests                       | `task test`                 | Runs tests with `pytest`                        |
 | Run Tests across Python Versions | `task test:matrix`         | Runs tests on Python 3.10 through 3.14          |

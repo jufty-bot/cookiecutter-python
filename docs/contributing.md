@@ -18,7 +18,7 @@ manager) and **[task]** (task runner). Once both are installed, you can use
     sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d
     ```
 
-3. Install project dependencies and list available tasks
+3. Install the project development environment
 
     ```shell
     task install
