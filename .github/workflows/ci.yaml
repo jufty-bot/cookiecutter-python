@@ -14,7 +14,7 @@ permissions:
     pull-requests: write
 
 jobs:
-    ci:
+    test:
         name: ${{ matrix.name }}
         runs-on: ubuntu-24.04
         concurrency:
@@ -28,29 +28,6 @@ jobs:
                       task: test
                       install: true
                       annotations_pytest: true
-                    - name: pre-commit
-                      task: install
-                      install: true
-                      pre_commit: true
-                    - name: template - build
-                      task: build
-                      template: true
-                      buildx: true
-                    - name: template - check - format
-                      task: check:format
-                      template: true
-                      install: true
-                      annotations_ruff: true
-                    - name: template - check - lint
-                      task: check:lint
-                      template: true
-                      install: true
-                      annotations_ruff: true
-                    - name: template - check - types
-                      task: check:types
-                      template: true
-                      install: true
-                      annotations_mypy: true
                     - name: template - test - 3.10
                       task: test
                       template: true
@@ -80,6 +57,74 @@ jobs:
                       pytest_coverage: true
                       pytest_coverage_xml: tests/example-project/coverage.xml
                       pytest_coverage_junit: tests/example-project/pytest.xml
+        steps:
+            - name: lock template project
+              if: matrix.template || false
+              uses: juftin/actions/taskfile@v1
+              with:
+                  task: lock
+                  task-args: --taskfile tests/example-project/Taskfile.yaml
+                  checkout: true
+                  setup-uv: true
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+            - name: install template project
+              if: matrix.template && matrix.install
+              uses: juftin/actions/taskfile@v1
+              with:
+                  task: install
+                  task-args: --taskfile tests/example-project/Taskfile.yaml
+                  setup-task: false
+                  setup-uv: false
+            - name: ${{ matrix.name }}
+              uses: juftin/actions/taskfile@v1
+              with:
+                  task: ${{ matrix.task }}
+                  task-args: ${{ matrix.template && '--taskfile tests/example-project/Taskfile.yaml' || '' }}
+                  checkout: ${{ !matrix.template }}
+                  install: ${{ !matrix.template && matrix.install || false }}
+                  setup-task: ${{ !matrix.template }}
+                  setup-uv: ${{ !matrix.template }}
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  annotations-pytest: ${{ matrix.annotations_pytest || false }}
+                  pytest-coverage: ${{ matrix.pytest_coverage && github.event_name == 'pull_request' && !github.event.pull_request.head.repo.fork || false }}
+                  pytest-coverage-xml: ${{ matrix.pytest_coverage_xml || 'coverage.xml' }}
+                  pytest-coverage-junit: ${{ matrix.pytest_coverage_junit || 'pytest.xml' }}
+              env:
+                  UV_PYTHON: ${{ matrix.python || '' }}
+    ci:
+        if: github.event_name == 'pull_request'
+        name: ${{ matrix.name }}
+        runs-on: ubuntu-24.04
+        concurrency:
+            group: ${{ github.workflow }}-${{ matrix.name }}-${{ github.event.pull_request.number }}
+            cancel-in-progress: true
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - name: pre-commit
+                      task: install
+                      install: true
+                      pre_commit: true
+                    - name: template - build
+                      task: build
+                      template: true
+                      buildx: true
+                    - name: template - check - format
+                      task: check:format
+                      template: true
+                      install: true
+                      annotations_ruff: true
+                    - name: template - check - lint
+                      task: check:lint
+                      template: true
+                      install: true
+                      annotations_ruff: true
+                    - name: template - check - types
+                      task: check:types
+                      template: true
+                      install: true
+                      annotations_mypy: true
                     - name: template - pre-commit
                       task: install
                       template: true
@@ -110,7 +155,7 @@ jobs:
                   task: ${{ matrix.task }}
                   task-args: ${{ matrix.template && '--taskfile tests/example-project/Taskfile.yaml' || '' }}
                   checkout: ${{ !matrix.template }}
-                  install: ${{ matrix.install || false }}
+                  install: ${{ !matrix.template && matrix.install || false }}
                   fetch-depth: ${{ matrix.pre_commit && '0' || '1' }}
                   setup-task: ${{ !matrix.template }}
                   setup-uv: ${{ !matrix.template }}
@@ -118,14 +163,8 @@ jobs:
                   github-token: ${{ secrets.GITHUB_TOKEN }}
                   annotations-ruff: ${{ matrix.annotations_ruff || false }}
                   annotations-mypy: ${{ matrix.annotations_mypy || false }}
-                  annotations-pytest: ${{ matrix.annotations_pytest || false }}
-                  pytest-coverage: ${{ matrix.pytest_coverage && github.event_name == 'pull_request' && !github.event.pull_request.head.repo.fork || false }}
-                  pytest-coverage-xml: ${{ matrix.pytest_coverage_xml || 'coverage.xml' }}
-                  pytest-coverage-junit: ${{ matrix.pytest_coverage_junit || 'pytest.xml' }}
-              env:
-                  UV_PYTHON: ${{ matrix.python || '' }}
             - name: pre-commit
-              if: matrix.pre_commit && github.event_name == 'pull_request'
+              if: matrix.pre_commit
               run: |
                   uv tool run --isolated \
                     --with pre-commit-uv \
