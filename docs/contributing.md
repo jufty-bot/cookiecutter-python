@@ -36,7 +36,7 @@ manager) and **[task]** (task runner). Once both are installed, you can use
 
 | Command Description                | Command                | Notes                                      |
 | ---------------------------------- | ---------------------- | ------------------------------------------ |
-| List Available Tasks               | `task`                 | Syncs dependencies before listing tasks    |
+| List Available Tasks               | `task`                 | Lists tasks in alphanumeric order          |
 | Install Project + Dev Dependencies | `task install`         | Installs dependencies and pre-commit hooks |
 | Run Copier Tests                   | `task test`            | Runs the Copier test suite                 |
 | Run Documentation Site             | `task docs`            | Runs MkDocs                                |

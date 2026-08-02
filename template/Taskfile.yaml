@@ -8,19 +8,25 @@ vars:
     DOCKER_REPO: {{ github_user }}/{{ package_name }}
 
 tasks:
-    #######################################
+    ########################
+    # DEFAULT TASK
+    ########################
     default:
         desc: List Available Tasks
         cmds:
-            - task --list-all
-        deps: [sync]
-    #######################################
+            - task --list-all --sort alphanumeric
+        silent: true
+    ########################
+    # INSTALL AND DEPENDENCIES
+    ########################
     install:
         desc: Install Project + Dev Dependencies
         cmds:
             - task: pre-commit-install
             - task: sync
-    #######################################
+    ########################
+    # TESTING
+    ########################
     test:
         desc: Run Tests
         cmds:
@@ -42,7 +48,9 @@ tasks:
               task: test
               vars:
                   UV_PYTHON: "{{"{{"}}.ITEM.PYTHON{{"}}"}}"
-    #######################################
+    ########################
+    # CODE QUALITY CHECKS
+    ########################
     check:format:
         desc: Code Quality Check - Formatting
         cmds:
@@ -62,19 +70,6 @@ tasks:
             - task: check:format
             - task: check:lint
     #######################################
-    fmt:
-        desc: Code Quality Auto-Fix - Formatting
-        cmds:
-            - uv run -- ruff format {{"{{"}}.CLI_ARGS | default .ROOT_DIR{{"}}"}}
-        deps: [sync]
-    #######################################
-    fix:
-        desc: Code Quality Auto-Fix - Formatting + Linting
-        cmds:
-            - task: fmt
-            - uv run -- ruff check --fix {{"{{"}}.CLI_ARGS | default .ROOT_DIR{{"}}"}}
-        deps: [sync]
-    #######################################
     check:types:
         desc: Code Quality Check - Type Checking
         cmds:
@@ -91,7 +86,24 @@ tasks:
         cmds:
             - task: check:style
             - task: check:types
+    ########################
+    # CODE QUALITY FIXES
+    ########################
+    fmt:
+        desc: Code Quality Auto-Fix - Formatting
+        cmds:
+            - uv run -- ruff format {{"{{"}}.CLI_ARGS | default .ROOT_DIR{{"}}"}}
+        deps: [sync]
     #######################################
+    fix:
+        desc: Code Quality Auto-Fix - Formatting + Linting
+        cmds:
+            - task: fmt
+            - uv run -- ruff check --fix {{"{{"}}.CLI_ARGS | default .ROOT_DIR{{"}}"}}
+        deps: [sync]
+    ########################
+    # BUILD AND PUBLISH
+    ########################
     dist:
         desc: Build Distribution Artifacts
         cmds:
@@ -131,7 +143,9 @@ tasks:
             vars: [CI, RELEASE_VERSION]
         status:
             - test ! -f {{"{{"}}.ROOT_DIR{{"}}"}}/{{"{{"}}.DOCKERFILE | default "Dockerfile"{{"}}"}}
-    #######################################
+    ########################
+    # DOCUMENTATION AND COMMANDS
+    ########################
     docs:
         desc: Run Documentation Site
         cmds:
@@ -160,16 +174,18 @@ tasks:
             - test ! -f {{"{{"}}.ROOT_DIR{{"}}"}}/{{"{{"}}.DOCKERFILE | default "Dockerfile"{{"}}"}}
         requires:
             vars: [DOCKER_REPO]
-    #######################################
+    ########################
+    # DEPENDENCY MANAGEMENT
+    ########################
     lock:
         desc: Regenerate Project Lockfile
         cmds:
             - uv lock
         env:
             UV_LOCKED: "0"
-    #######################################
+    ########################
     # INTERNAL TASKS
-    #######################################
+    ########################
     sync:
         desc: Install Project Dependencies
         internal: true
