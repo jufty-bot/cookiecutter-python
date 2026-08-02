@@ -28,37 +28,46 @@ jobs:
                       task: build
                     - name: check - format
                       task: check:format
+                      install: true
                       annotations_ruff: true
                     - name: check - lint
                       task: check:lint
+                      install: true
                       annotations_ruff: true
                     - name: check - types
                       task: check:types
+                      install: true
                       annotations_mypy: true
                     - name: test - 3.10
                       task: test
+                      install: true
                       python: "3.10"
                     - name: test - 3.11
                       task: test
+                      install: true
                       python: "3.11"
                     - name: test - 3.12
                       task: test
+                      install: true
                       python: "3.12"
                     - name: test - 3.13
                       task: test
+                      install: true
                       python: "3.13"
                     - name: test - 3.14
                       task: test
+                      install: true
                       python: "3.14"
                     - name: pre-commit
                       task: install
+                      install: true
         steps:
             - name: ${{"{{"}} matrix.name {{"}}"}}
               uses: juftin/actions/taskfile@v1
               with:
                   task: ${{"{{"}} matrix.task {{"}}"}}
                   checkout: true
-                  install: ${{"{{"}} matrix.name != 'build' {{"}}"}}
+                  install: ${{"{{"}} matrix.install || false {{"}}"}}
                   fetch-depth: ${{"{{"}} matrix.name == 'pre-commit' && '0' || '1' {{"}}"}}
                   setup-uv: true
                   buildx: ${{"{{"}} matrix.name == 'build' {{"}}"}}
