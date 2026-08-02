@@ -34,15 +34,15 @@ manager) and **[task]** (task runner). Once both are installed, you can use
 
 ### Task Cheat Sheet
 
-| Command Description             | Command                | Notes                                      |
-| ------------------------------- | ---------------------- | ------------------------------------------ |
-| List Available Tasks            | `task`                 | Syncs dependencies before listing tasks    |
-| Install Project Dev Environment | `task install`         | Installs dependencies and pre-commit hooks |
-| Run Copier Tests                | `task test`            | Runs the Copier test suite                 |
-| Run Documentation Site          | `task docs`            | Runs MkDocs                                |
-| Run a Project Command           | `task run -- <cmd>`    | Runs a command in the project environment  |
-| Update Dependency Lockfile      | `task lock`            | Regenerates `uv.lock`                      |
-| Regenerate Example Project      | `task example-project` | Replaces the checked-in generated fixture  |
+| Command Description                | Command                | Notes                                      |
+| ---------------------------------- | ---------------------- | ------------------------------------------ |
+| List Available Tasks               | `task`                 | Syncs dependencies before listing tasks    |
+| Install Project + Dev Dependencies | `task install`         | Installs dependencies and pre-commit hooks |
+| Run Copier Tests                   | `task test`            | Runs the Copier test suite                 |
+| Run Documentation Site             | `task docs`            | Runs MkDocs                                |
+| Run a Project Command              | `task run -- <cmd>`    | Runs a command in the project environment  |
+| Regenerate Project Lockfile        | `task lock`            | Regenerates `uv.lock`                      |
+| Regenerate Example Project         | `task example-project` | Replaces the checked-in generated fixture  |
 
 ### Task Explanation
 

@@ -10,13 +10,13 @@ vars:
 tasks:
     #######################################
     default:
-        desc: Install Project, List Tasks
+        desc: List Available Tasks
         cmds:
             - task --list-all
         deps: [sync]
     #######################################
     install:
-        desc: Install Project Dev Environment
+        desc: Install Project + Dev Dependencies
         cmds:
             - task: pre-commit-install
             - task: sync
@@ -44,39 +44,39 @@ tasks:
                   UV_PYTHON: "{{.ITEM.PYTHON}}"
     #######################################
     check:format:
-        desc: Check Code Formatting
+        desc: Code Quality Check - Formatting
         cmds:
             - task: fmt
               vars:
                   CLI_ARGS: --check
     #######################################
     check:lint:
-        desc: Run Ruff Linter
+        desc: Code Quality Check - Linting
         cmds:
             - uv run -- ruff check {{.CLI_ARGS | default .ROOT_DIR}}
         deps: [sync]
     #######################################
     check:style:
-        desc: Check Code Style
+        desc: Code Quality Check - Formatting + Linting
         cmds:
             - task: check:format
             - task: check:lint
     #######################################
     fmt:
-        desc: Run Code Formatters
+        desc: Code Quality Auto-Fix - Formatting
         cmds:
             - uv run -- ruff format {{.CLI_ARGS | default .ROOT_DIR}}
         deps: [sync]
     #######################################
     fix:
-        desc: Auto-fix Code Formatting and Style
+        desc: Code Quality Auto-Fix - Formatting + Linting
         cmds:
             - task: fmt
             - uv run -- ruff check --fix {{.CLI_ARGS | default .ROOT_DIR}}
         deps: [sync]
     #######################################
     check:types:
-        desc: Run Static Type Checks
+        desc: Code Quality Check - Type Checking
         cmds:
             - |
                 uv run -- \
@@ -87,13 +87,13 @@ tasks:
             - '[$(uv tree --package mypy) != ""]'
     #######################################
     check:
-        desc: Check Code Formatting, Linting, and Type Checking
+        desc: Code Quality Check - Formatting + Linting + Type Checking
         cmds:
             - task: check:style
             - task: check:types
     #######################################
     dist:
-        desc: Build the Project Artifacts
+        desc: Build Distribution Artifacts
         cmds:
             - cmd: rm -rf {{.ROOT_DIR}}/dist
             - cmd: uv build
@@ -122,7 +122,7 @@ tasks:
             - task: docker
     #######################################
     publish:
-        desc: Publish the Project Artifacts
+        desc: Publish Docker Image
         cmds:
             - task: docker
               vars:
@@ -133,18 +133,18 @@ tasks:
             - test ! -f {{.ROOT_DIR}}/{{.DOCKERFILE | default "Dockerfile"}}
     #######################################
     docs:
-        desc: Generate Documentation
+        desc: Run Documentation Site
         cmds:
             - uv run --group docs -- mkdocs {{.CLI_ARGS | default "serve"}}
     #######################################
     run:
-        desc: Run Command within Project (requires "--")
+        desc: Run Project Command (requires "--")
         interactive: true
         cmds:
             - uv run -- {{.CLI_ARGS}}
     #######################################
     docker-run:
-        desc: Run Command within Docker Container (supports "--" for command)
+        desc: Run Docker Command (requires "--")
         interactive: true
         cmds:
             - |
@@ -162,7 +162,7 @@ tasks:
             vars: [DOCKER_REPO]
     #######################################
     lock:
-        desc: Regenerate the Project Lockfile
+        desc: Regenerate Project Lockfile
         cmds:
             - uv lock
         env:
