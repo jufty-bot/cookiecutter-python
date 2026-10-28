@@ -8,6 +8,9 @@ readme = "README.md"
 requires-python = ">=3.10"
 version = "0.0.0"
 
+[tool.uv]
+exclude-newer = "7 days"
+
 [dependency-groups]
 dev = [
   "copier~=9.0",
