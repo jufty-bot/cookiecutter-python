@@ -1,6 +1,6 @@
 [project]
 authors = [
-  {name = "Justin Flannery", email = "juftin@juftin.com"}
+  { name = "Justin Flannery", email = "juftin@juftin.com" }
 ]
 license = "MIT"
 name = "cookiecutter-python"
